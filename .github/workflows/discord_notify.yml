@@ -1,0 +1,257 @@
+name: Discord Notifiche
+
+on:
+  push:
+  issues:
+    types: [opened, closed, reopened]
+  issue_comment:
+    types: [created, edited, deleted]
+  pull_request:
+    types: [opened, closed, reopened, synchronize]
+  release:
+    types: [published, edited, released]
+
+jobs:
+  commit-notification:
+    if: github.event_name == 'push'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Prepara messaggio commit
+        id: prepare_commit_message
+        uses: actions/github-script@v7
+        with:
+          result-encoding: string
+          script: |
+            const message = context.payload.head_commit?.message ?? '';
+            const normalized = message.replace(/\r\n/g, '\n').replace(/```/g, '``\u200b`').trim();
+            if (!normalized) {
+              return 'Messaggio non disponibile';
+            }
+            const suffix = '\n… (testo troncato)';
+            const maxChars = 1800;
+            if (normalized.length <= maxChars) {
+              return normalized;
+            }
+            return normalized.slice(0, maxChars - suffix.length).trimEnd() + suffix;
+      - uses: rjstone/discord-webhook-notify@v1.0.4
+        with:
+          webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
+          severity: info
+          text: "📌 Nuovo commit su **${{ github.repository }}**"
+          description: |
+            **Autore:** `${{ github.actor }}`
+            **Branch:** `${{ github.ref_name || github.ref }}`
+            **Commit:** [${{ github.sha }}](${{ github.event.head_commit.url }})
+          details: |
+            📝 **Messaggio**
+            ```text
+            ${{ steps.prepare_commit_message.outputs.result }}
+            ```
+          footer: "Notifica automatica da GitHub Actions"
+          username: "GitHub Commit Bot"
+          avatarUrl: "https://github.com/${{ github.actor }}.png"
+
+  issue-notification:
+    if: github.event_name == 'issues'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Prepara descrizione issue
+        id: prepare_issue_body
+        uses: actions/github-script@v7
+        with:
+          result-encoding: string
+          script: |
+            const body = context.payload.issue?.body ?? '';
+            const normalized = body.replace(/\r\n/g, '\n').replace(/```/g, '``\u200b`').trim();
+            if (!normalized) {
+              return 'Nessuna descrizione fornita';
+            }
+            const suffix = '\n… (testo troncato)';
+            const maxChars = 1800;
+            if (normalized.length <= maxChars) {
+              return normalized;
+            }
+            return normalized.slice(0, maxChars - suffix.length).trimEnd() + suffix;
+      - uses: rjstone/discord-webhook-notify@v1.0.4
+        with:
+          webhookUrl: ${{ secrets.DISCORD_WEBHOOK_ISSUES_PR }}
+          severity: ${{ github.event.action == 'opened' && 'info' || (github.event.action == 'closed' && 'success' || 'warning') }}
+          text: "📋 **${{ github.event.issue.user.login }}** ha ${{ github.event.action }} un'issue in **${{ github.repository }}**"
+          description: |
+            **Issue #${{ github.event.issue.number }}**
+            [${{ github.event.issue.title }}](${{ github.event.issue.html_url }})
+            **Autore:** `${{ github.event.issue.user.login }}`
+            **Stato:** `${{ github.event.action }}`
+          details: |
+            📝 **Descrizione**
+            ```markdown
+            ${{ steps.prepare_issue_body.outputs.result }}
+            ```
+            🔗 [Apri issue](${{ github.event.issue.html_url }})
+          footer: "Notifica automatica da GitHub Actions"
+          username: "GitHub Issue Bot"
+          avatarUrl: "https://github.com/${{ github.actor }}.png"
+
+  issue-comment-notification:
+    if: github.event_name == 'issue_comment' && github.event.issue.pull_request == ''
+    runs-on: ubuntu-latest
+    steps:
+      - name: Prepara corpo commento issue
+        id: prepare_issue_comment
+        uses: actions/github-script@v7
+        with:
+          result-encoding: string
+          script: |
+            const body = context.payload.comment?.body ?? '';
+            const normalized = body.replace(/\r\n/g, '\n').replace(/```/g, '``\u200b`').trim();
+            if (!normalized) {
+              return 'Nessun commento fornito';
+            }
+            const suffix = '\n… (testo troncato)';
+            const maxChars = 1800;
+            if (normalized.length <= maxChars) {
+              return normalized;
+            }
+            return normalized.slice(0, maxChars - suffix.length).trimEnd() + suffix;
+      - uses: rjstone/discord-webhook-notify@v1.0.4
+        with:
+          webhookUrl: ${{ secrets.DISCORD_WEBHOOK_ISSUES_PR }}
+          severity: info
+          text: "💬 **${{ github.event.comment.user.login }}** ha commentato un'issue in **${{ github.repository }}**"
+          description: |
+            **Issue #${{ github.event.issue.number }}**
+            [${{ github.event.issue.title }}](${{ github.event.issue.html_url }})
+            **Autore issue:** `${{ github.event.issue.user.login }}`
+            **Commentatore:** `${{ github.event.comment.user.login }}`
+          details: |
+            💬 **Commento**
+            ```markdown
+            ${{ steps.prepare_issue_comment.outputs.result }}
+            ```
+            🔗 [Vai al commento](${{ github.event.comment.html_url }})
+          footer: "Notifica automatica da GitHub Actions"
+          username: "GitHub Comment Bot"
+          avatarUrl: "https://github.com/${{ github.actor }}.png"
+
+  pr-comment-notification:
+    if: github.event_name == 'issue_comment' && github.event.issue.pull_request != ''
+    runs-on: ubuntu-latest
+    steps:
+      - name: Prepara corpo commento PR
+        id: prepare_pr_comment
+        uses: actions/github-script@v7
+        with:
+          result-encoding: string
+          script: |
+            const body = context.payload.comment?.body ?? '';
+            const normalized = body.replace(/\r\n/g, '\n').replace(/```/g, '``\u200b`').trim();
+            if (!normalized) {
+              return 'Nessun commento fornito';
+            }
+            const suffix = '\n… (testo troncato)';
+            const maxChars = 1800;
+            if (normalized.length <= maxChars) {
+              return normalized;
+            }
+            return normalized.slice(0, maxChars - suffix.length).trimEnd() + suffix;
+      - uses: rjstone/discord-webhook-notify@v1.0.4
+        with:
+          webhookUrl: ${{ secrets.DISCORD_WEBHOOK_ISSUES_PR }}
+          severity: info
+          text: "💬 **${{ github.event.comment.user.login }}** ha commentato una PR in **${{ github.repository }}**"
+          description: |
+            **PR #${{ github.event.issue.number }}**
+            [${{ github.event.issue.title }}](${{ github.event.issue.html_url }})
+            **Autore PR:** `${{ github.event.issue.user.login }}`
+            **Commentatore:** `${{ github.event.comment.user.login }}`
+          details: |
+            💬 **Commento**
+            ```markdown
+            ${{ steps.prepare_pr_comment.outputs.result }}
+            ```
+            🔗 [Vai al commento](${{ github.event.comment.html_url }})
+          footer: "Notifica automatica da GitHub Actions"
+          username: "GitHub PR Comment Bot"
+          avatarUrl: "https://github.com/${{ github.actor }}.png"
+
+  pr-notification:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Prepara descrizione PR
+        id: prepare_pr_body
+        uses: actions/github-script@v7
+        with:
+          result-encoding: string
+          script: |
+            const body = context.payload.pull_request?.body ?? '';
+            const normalized = body.replace(/\r\n/g, '\n').replace(/```/g, '``\u200b`').trim();
+            if (!normalized) {
+              return 'Nessuna descrizione fornita';
+            }
+            const suffix = '\n… (testo troncato)';
+            const maxChars = 1800;
+            if (normalized.length <= maxChars) {
+              return normalized;
+            }
+            return normalized.slice(0, maxChars - suffix.length).trimEnd() + suffix;
+      - uses: rjstone/discord-webhook-notify@v1.0.4
+        with:
+          webhookUrl: ${{ secrets.DISCORD_WEBHOOK_ISSUES_PR }}
+          severity: ${{ github.event.action == 'opened' && 'info' || (github.event.action == 'closed' && (github.event.pull_request.merged && 'success' || 'warning') || 'info') }}
+          text: "🚀 **${{ github.event.pull_request.user.login }}** ha ${{ github.event.action }} una PR in **${{ github.repository }}**"
+          description: |
+            **PR #${{ github.event.pull_request.number }}**
+            [${{ github.event.pull_request.title }}](${{ github.event.pull_request.html_url }})
+            **Autore:** `${{ github.event.pull_request.user.login }}`
+            **Stato:** `${{ github.event.action }}${{ github.event.pull_request.merged && ' (merged)' || '' }}`
+            **Da:** `${{ github.event.pull_request.head.ref }}` ➜ **A:** `${{ github.event.pull_request.base.ref }}`
+          details: |
+            📝 **Descrizione**
+            ```markdown
+            ${{ steps.prepare_pr_body.outputs.result }}
+            ```
+            🔗 [Apri PR](${{ github.event.pull_request.html_url }})
+          footer: "Notifica automatica da GitHub Actions"
+          username: "GitHub PR Bot"
+          avatarUrl: "https://github.com/${{ github.actor }}.png"
+
+  release-notification:
+    if: github.event_name == 'release'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Prepara descrizione release
+        id: prepare_release_body
+        uses: actions/github-script@v7
+        with:
+          result-encoding: string
+          script: |
+            const body = context.payload.release?.body ?? '';
+            const normalized = body.replace(/\r\n/g, '\n').replace(/```/g, '``\u200b`').trim();
+            if (!normalized) {
+              return 'Nessuna nota di rilascio fornita';
+            }
+            const suffix = '\n… (testo troncato)';
+            const maxChars = 1800;
+            if (normalized.length <= maxChars) {
+              return normalized;
+            }
+            return normalized.slice(0, maxChars - suffix.length).trimEnd() + suffix;
+      - uses: rjstone/discord-webhook-notify@v1.0.4
+        with:
+          webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
+          severity: ${{ github.event.action == 'published' && 'success' || 'info' }}
+          text: "🚢 Nuova release **${{ github.event.release.tag_name }}** su **${{ github.repository }}**"
+          description: |
+            **Titolo:** `${{ github.event.release.name || github.event.release.tag_name }}`
+            **Autore:** `${{ github.event.release.author.login }}`
+            **Stato:** `${{ github.event.action }}`
+          details: |
+            📝 **Note di rilascio**
+            ```markdown
+            ${{ steps.prepare_release_body.outputs.result }}
+            ```
+            🔗 [Vai alla release](${{ github.event.release.html_url }})
+          footer: "Notifica automatica da GitHub Actions"
+          username: "GitHub Release Bot"
+          avatarUrl: "https://github.com/${{ github.actor }}.png"
