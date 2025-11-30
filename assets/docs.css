@@ -98,7 +98,8 @@
     body {
       display: flex;
       min-height: 100vh;
-      overflow: hidden;
+      overflow-x: hidden;
+      overflow-y: auto;
       font-family: "Segoe UI", "Segoe UI Variable", system-ui, -apple-system, sans-serif;
       transition: background-color 0.2s ease, color 0.2s ease;
     }
