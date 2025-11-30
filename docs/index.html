@@ -1,0 +1,994 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <title>FrancoGame – Comandi console (Beta Tester)</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <style>
+    :root {
+      --bg: #0f172a;
+      --bg-elevated: #111827;
+      --bg-card: #020617;
+      --border-subtle: #1f2937;
+      --accent: #38bdf8;
+      --accent-soft: rgba(56, 189, 248, 0.12);
+      --accent-strong: #0ea5e9;
+      --text-main: #e5e7eb;
+      --text-muted: #9ca3af;
+      --text-soft: #6b7280;
+      --code-bg: #020617;
+      --code-border: #1f2937;
+      --scrollbar-track: #020617;
+      --scrollbar-thumb: #1f2937;
+      --scrollbar-thumb-hover: #4b5563;
+      --danger: #f97373;
+      --success: #34d399;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      background: radial-gradient(circle at top, #020617 0, #020617 40%, #000 100%);
+      color: var(--text-main);
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    body {
+      display: flex;
+      min-height: 100vh;
+      overflow: hidden;
+    }
+
+    /* Layout */
+
+    .sidebar {
+      width: 280px;
+      background: linear-gradient(180deg, #020617, #020617 55%, #020617);
+      border-right: 1px solid #111827;
+      padding: 1.5rem 1.25rem;
+      display: flex;
+      flex-direction: column;
+      position: sticky;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      max-height: 100vh;
+      overflow-y: auto;
+    }
+
+    .sidebar-header {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .badge-engine {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      background: rgba(56, 189, 248, 0.1);
+      color: var(--accent);
+      padding: 0.18rem 0.5rem;
+      border-radius: 999px;
+      border: 1px solid rgba(56, 189, 248, 0.35);
+    }
+
+    .logo-circle {
+      width: 32px;
+      height: 32px;
+      border-radius: 999px;
+      background: radial-gradient(circle at 30% 20%, #38bdf8 0, #0ea5e9 30%, #0369a1 70%, #020617 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 0.9rem;
+      color: #e5f3ff;
+      box-shadow: 0 0 0 1px rgba(15, 23, 42, 0.9), 0 0 16px rgba(56, 189, 248, 0.45);
+    }
+
+    .sidebar-title-block {
+      display: flex;
+      flex-direction: column;
+      gap: 0.1rem;
+    }
+
+    .sidebar-title {
+      font-size: 1rem;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+    }
+
+    .sidebar-subtitle {
+      font-size: 0.8rem;
+      color: var(--text-soft);
+    }
+
+    .sidebar-note {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      line-height: 1.4;
+      background: rgba(15, 23, 42, 0.9);
+      border-radius: 0.75rem;
+      padding: 0.6rem 0.7rem;
+      border: 1px solid rgba(31, 41, 55, 0.9);
+      margin-bottom: 1rem;
+    }
+
+    .sidebar-note strong {
+      color: var(--accent-strong);
+      font-weight: 600;
+    }
+
+    .nav-section-title {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--text-soft);
+      margin: 0.75rem 0 0.4rem;
+    }
+
+    .nav-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+    }
+
+    .nav-list li a {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      text-decoration: none;
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      padding: 0.35rem 0.5rem;
+      border-radius: 0.5rem;
+      transition: background 0.15s ease, color 0.15s ease, transform 0.08s ease;
+    }
+
+    .nav-list li a:hover {
+      background: rgba(15, 23, 42, 0.85);
+      color: var(--accent);
+      transform: translateX(2px);
+    }
+
+    .nav-bullet {
+      width: 4px;
+      height: 4px;
+      border-radius: 999px;
+      background: rgba(148, 163, 184, 0.7);
+    }
+
+    .nav-list li a span.section-index {
+      font-variant-numeric: tabular-nums;
+      font-size: 0.72rem;
+      color: var(--text-soft);
+      opacity: 0.8;
+    }
+
+    .nav-footer {
+      margin-top: 1.5rem;
+      padding-top: 1rem;
+      border-top: 1px solid #111827;
+      font-size: 0.75rem;
+      color: var(--text-soft);
+    }
+
+    .nav-footer small {
+      display: block;
+      margin-top: 0.15rem;
+    }
+
+    .nav-footer-code {
+      font-family: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      font-size: 0.7rem;
+      background: rgba(15, 23, 42, 0.9);
+      border-radius: 999px;
+      padding: 0.2rem 0.55rem;
+      border: 1px solid rgba(31, 41, 55, 0.9);
+      display: inline-flex;
+      align-items: center;
+      gap: 0.25rem;
+      margin-top: 0.35rem;
+    }
+
+    .nav-footer-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 999px;
+      background: #22c55e;
+      box-shadow: 0 0 0 1px rgba(34, 197, 94, 0.4);
+    }
+
+    /* Content area */
+
+    .content {
+      flex: 1;
+      overflow-y: auto;
+      padding: 1.75rem 2.25rem 2rem;
+    }
+
+    .content-inner {
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .page-header {
+      margin-bottom: 1.5rem;
+    }
+
+    .page-title {
+      font-size: 1.5rem;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+      margin: 0;
+    }
+
+    .page-subtitle {
+      margin: 0.3rem 0 0;
+      font-size: 0.9rem;
+      color: var(--text-soft);
+    }
+
+    .tag-row {
+      margin-top: 0.75rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+      font-size: 0.7rem;
+    }
+
+    .tag-pill {
+      padding: 0.2rem 0.55rem;
+      border-radius: 999px;
+      border: 1px solid #1f2937;
+      background: rgba(15, 23, 42, 0.9);
+      color: var(--text-muted);
+    }
+
+    .tag-pill strong {
+      color: var(--accent);
+      font-weight: 500;
+    }
+
+    /* Sections */
+
+    section {
+      margin-bottom: 1.75rem;
+      border-radius: 1rem;
+      padding: 1.1rem 1.1rem 1.2rem;
+      background: radial-gradient(circle at top left, rgba(56, 189, 248, 0.09), transparent 55%), rgba(15, 23, 42, 0.96);
+      border: 1px solid rgba(31, 41, 55, 0.95);
+      box-shadow:
+        0 18px 45px rgba(0, 0, 0, 0.76),
+        0 0 0 1px rgba(15, 23, 42, 0.9);
+    }
+
+    section.alt {
+      background: radial-gradient(circle at top right, rgba(56, 189, 248, 0.07), transparent 55%), rgba(15, 23, 42, 0.96);
+    }
+
+    section h2 {
+      margin-top: 0;
+      margin-bottom: 0.6rem;
+      font-size: 1.05rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.5rem;
+    }
+
+    section h2 span.section-label {
+      font-size: 0.8rem;
+      font-weight: 500;
+      color: var(--text-soft);
+    }
+
+    section h3 {
+      margin-top: 0.9rem;
+      margin-bottom: 0.4rem;
+      font-size: 0.95rem;
+    }
+
+    p {
+      margin: 0.4rem 0;
+      font-size: 0.9rem;
+      line-height: 1.5;
+      color: var(--text-muted);
+    }
+
+    ul {
+      margin: 0.4rem 0 0.5rem 1.1rem;
+      padding: 0;
+      color: var(--text-muted);
+      font-size: 0.9rem;
+    }
+
+    li + li {
+      margin-top: 0.1rem;
+    }
+
+    /* Block styles */
+
+    .callout {
+      border-radius: 0.8rem;
+      padding: 0.6rem 0.7rem;
+      font-size: 0.85rem;
+      background: rgba(15, 23, 42, 0.92);
+      border: 1px solid rgba(31, 41, 55, 0.9);
+      color: var(--text-muted);
+      display: flex;
+      gap: 0.5rem;
+      margin: 0.4rem 0 0.6rem;
+    }
+
+    .callout-label {
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--accent);
+      padding-top: 0.1rem;
+    }
+
+    .callout.danger {
+      border-color: rgba(248, 113, 113, 0.7);
+      background: linear-gradient(135deg, rgba(248, 113, 113, 0.12), rgba(15, 23, 42, 0.95));
+    }
+
+    .callout.success {
+      border-color: rgba(52, 211, 153, 0.75);
+      background: linear-gradient(135deg, rgba(16, 185, 129, 0.12), rgba(15, 23, 42, 0.95));
+    }
+
+    /* Code */
+
+    code {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      font-size: 0.8rem;
+      background: rgba(15, 23, 42, 0.85);
+      padding: 0.08rem 0.3rem;
+      border-radius: 0.35rem;
+      border: 1px solid rgba(31, 41, 55, 0.9);
+      color: #e5f3ff;
+    }
+
+    pre {
+      margin: 0.35rem 0 0.75rem;
+      padding: 0.5rem 0.6rem;
+      border-radius: 0.7rem;
+      background: var(--code-bg);
+      border: 1px solid var(--code-border);
+      font-size: 0.8rem;
+      overflow-x: auto;
+    }
+
+    pre code {
+      background: transparent;
+      border: none;
+      padding: 0;
+    }
+
+    /* Command blocks */
+
+    .cmd-group {
+      margin: 0.4rem 0 0.7rem;
+      padding: 0.55rem 0.65rem;
+      border-radius: 0.7rem;
+      background: rgba(15, 23, 42, 0.9);
+      border: 1px solid rgba(31, 41, 55, 0.9);
+    }
+
+    .cmd-row {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 3fr);
+      gap: 0.5rem 0.75rem;
+      align-items: start;
+      font-size: 0.86rem;
+      padding: 0.25rem 0;
+    }
+
+    .cmd-row + .cmd-row {
+      border-top: 1px dashed rgba(55, 65, 81, 0.7);
+      padding-top: 0.45rem;
+      margin-top: 0.3rem;
+    }
+
+    .cmd-name {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      font-size: 0.78rem;
+      padding: 0.16rem 0.4rem;
+      background: rgba(15, 23, 42, 0.98);
+      border-radius: 999px;
+      border: 1px solid rgba(31, 41, 55, 0.9);
+      display: inline-flex;
+      align-items: center;
+      gap: 0.25rem;
+    }
+
+    .cmd-name span.dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 999px;
+      background: var(--accent);
+      box-shadow: 0 0 0 1px rgba(56, 189, 248, 0.5);
+    }
+
+    .cmd-desc {
+      color: var(--text-muted);
+      line-height: 1.4;
+    }
+
+    .cmd-tag-row {
+      margin-top: 0.2rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.25rem;
+      font-size: 0.7rem;
+    }
+
+    .cmd-tag {
+      border-radius: 999px;
+      border: 1px solid rgba(55, 65, 81, 0.9);
+      padding: 0.12rem 0.45rem;
+      color: var(--text-soft);
+      background: rgba(15, 23, 42, 0.96);
+    }
+
+    /* Lists inside sections */
+
+    section ul.compact {
+      margin-top: 0.25rem;
+      margin-bottom: 0.4rem;
+      font-size: 0.86rem;
+    }
+
+    section ul.compact li + li {
+      margin-top: 0.12rem;
+    }
+
+    /* Scrollbar */
+
+    ::-webkit-scrollbar {
+      width: 9px;
+      height: 9px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: var(--scrollbar-track);
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: var(--scrollbar-thumb);
+      border-radius: 999px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: var(--scrollbar-thumb-hover);
+    }
+
+    /* Responsive */
+
+    @media (max-width: 880px) {
+      body {
+        flex-direction: column;
+      }
+
+      .sidebar {
+        position: relative;
+        width: 100%;
+        max-height: none;
+        border-right: none;
+        border-bottom: 1px solid #111827;
+        flex-shrink: 0;
+      }
+
+      .content {
+        padding: 1.25rem 1.1rem 1.5rem;
+      }
+
+      .content-inner {
+        max-width: 100%;
+      }
+
+      .cmd-row {
+        grid-template-columns: minmax(0, 1.3fr) minmax(0, 3fr);
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <aside class="sidebar">
+    <div class="sidebar-header">
+      <div class="logo-circle">FG</div>
+      <div class="sidebar-title-block">
+        <div class="sidebar-title">FrancoGame</div>
+        <div class="sidebar-subtitle">Comandi console · Beta testing</div>
+      </div>
+    </div>
+
+    <div class="badge-engine">Unreal Engine 5.5.4</div>
+
+    <div class="sidebar-note">
+      Usa questa pagina come riferimento durante il testing.  
+      <strong>I comandi vanno digitati nella console in gioco</strong> e confermati con Invio.
+    </div>
+
+    <div>
+      <p class="nav-section-title">Sezioni</p>
+      <ul class="nav-list">
+        <li><a href="#intro"><span class="nav-bullet"></span><span class="section-index">1.</span> Introduzione</a></li>
+        <li><a href="#base"><span class="nav-bullet"></span><span class="section-index">2.</span> Comandi base</a></li>
+        <li><a href="#perf"><span class="nav-bullet"></span><span class="section-index">3.</span> Statistiche di performance</a></li>
+        <li><a href="#gfx"><span class="nav-bullet"></span><span class="section-index">4.</span> Grafica &amp; performance</a></li>
+        <li><a href="#comfort"><span class="nav-bullet"></span><span class="section-index">5.</span> Comfort visivo</a></li>
+        <li><a href="#debug"><span class="nav-bullet"></span><span class="section-index">6.</span> Debug leggero</a></li>
+        <li><a href="#bug"><span class="nav-bullet"></span><span class="section-index">7.</span> Comandi per bug</a></li>
+        <li><a href="#report"><span class="nav-bullet"></span><span class="section-index">8.</span> Come riportare un bug</a></li>
+      </ul>
+    </div>
+
+    <div class="nav-footer">
+      Guida pensata per build interne di test.
+      <small>Non condividere all’esterno senza autorizzazione.</small>
+      <div class="nav-footer-code">
+        <span class="nav-footer-dot"></span>
+        <span>Console: tasto sotto <strong>Esc</strong></span>
+      </div>
+    </div>
+  </aside>
+
+  <main class="content">
+    <div class="content-inner">
+
+      <header class="page-header">
+        <h1 class="page-title">Comandi console per beta tester</h1>
+        <p class="page-subtitle">
+          Riferimento rapido per modificare grafica, performance e debug nelle build di FrancoGame.
+        </p>
+        <div class="tag-row">
+          <div class="tag-pill"><strong>Target</strong> · Beta tester</div>
+          <div class="tag-pill"><strong>Piattaforma</strong> · Build interne UE 5.5.4</div>
+          <div class="tag-pill"><strong>Uso</strong> · Solo in ambienti non di produzione</div>
+        </div>
+      </header>
+
+      <!-- 1. Introduzione -->
+      <section id="intro">
+        <h2>
+          1. Introduzione
+          <span class="section-label">Come usare questa pagina</span>
+        </h2>
+        <p>
+          In questa build il gioco non ha ancora un menu opzioni completo. Per modificare grafica, performance e alcune impostazioni di debug
+          si usa la <strong>console di gioco</strong>.
+        </p>
+        <ul class="compact">
+          <li>La console si apre di solito con il tasto <code>~</code> (tilde) o il tasto sotto <code>Esc</code>.</li>
+          <li>Su alcune tastiere potrebbe essere mappata su un tasto diverso: se non succede nulla, avvisa lo sviluppatore.</li>
+        </ul>
+        <div class="callout">
+          <div class="callout-label">Nota</div>
+          <div>
+            Tutti i comandi elencati in questa pagina vanno digitati nella console e confermati con <strong>Invio</strong>.
+          </div>
+        </div>
+      </section>
+
+      <!-- 2. Comandi base -->
+      <section id="base" class="alt">
+        <h2>2. Comandi base <span class="section-label">Controllo del gioco</span></h2>
+
+        <h3>2.1 Controllo generale del gioco</h3>
+
+        <div class="cmd-group">
+          <div class="cmd-row">
+            <div class="cmd-name"><span class="dot"></span><span>quit</span></div>
+            <div class="cmd-desc">
+              Chiude immediatamente il gioco.
+              <div class="cmd-tag-row">
+                <span class="cmd-tag">Uscita</span>
+                <span class="cmd-tag">Globale</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="cmd-row">
+            <div class="cmd-name"><span class="dot"></span><span>restartlevel</span></div>
+            <div class="cmd-desc">
+              Ricarica il livello corrente da capo.
+              <div class="cmd-tag-row">
+                <span class="cmd-tag">Reset rapido</span>
+                <span class="cmd-tag">Debug</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="cmd-row">
+            <div class="cmd-name"><span class="dot"></span><span>open NomeMappa</span></div>
+            <div class="cmd-desc">
+              Carica una mappa specifica, se abilitato nella build. Esempi:
+              <br><code>open MainMenu</code>, <code>open Level01</code>
+              <div class="cmd-tag-row">
+                <span class="cmd-tag">Salto mappa</span>
+                <span class="cmd-tag">Solo se consentito</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 3. Statistiche di performance -->
+      <section id="perf">
+        <h2>3. Statistiche di performance <span class="section-label">FPS, tempi &amp; memoria</span></h2>
+
+        <p>
+          Usa questi comandi quando ti viene chiesto di riportare cali di frame, lag o problemi di performance.
+        </p>
+
+        <div class="cmd-group">
+          <div class="cmd-row">
+            <div class="cmd-name"><span class="dot"></span><span>stat fps</span></div>
+            <div class="cmd-desc">
+              Mostra gli FPS (frame al secondo) in tempo reale.
+            </div>
+          </div>
+
+          <div class="cmd-row">
+            <div class="cmd-name"><span class="dot"></span><span>stat unit</span></div>
+            <div class="cmd-desc">
+              Mostra i tempi principali:
+              <ul class="compact">
+                <li><strong>Game</strong> · logica di gioco</li>
+                <li><strong>Draw</strong> · render CPU</li>
+                <li><strong>GPU</strong> · scheda video</li>
+                <li><strong>RHIT</strong> · render thread</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="cmd-row">
+            <div class="cmd-name"><span class="dot"></span><span>stat unitgraph</span></div>
+            <div class="cmd-desc">
+              Come <code>stat unit</code>, ma con un grafico temporale che mostra l’andamento nel tempo.
+            </div>
+          </div>
+
+          <div class="cmd-row">
+            <div class="cmd-name"><span class="dot"></span><span>stat memory</span></div>
+            <div class="cmd-desc">
+              Mostra l’uso di memoria (utile su macchine con poca RAM o grossi caricamenti).
+            </div>
+          </div>
+        </div>
+
+        <div class="callout success">
+          <div class="callout-label">Suggerimento</div>
+          <div>
+            Per segnalare un bug di performance abilita almeno <code>stat fps</code> e <code>stat unit</code> e allega uno screenshot.
+          </div>
+        </div>
+      </section>
+
+      <!-- 4. Grafica & performance -->
+      <section id="gfx" class="alt">
+        <h2>4. Impostazioni di grafica e performance <span class="section-label">Preset &amp; regolazioni</span></h2>
+
+        <div class="callout">
+          <div class="callout-label">Regola generale</div>
+          <div>
+            Se il gioco scatta o va lento, prova prima i preset <strong>Bassa</strong> o <strong>Media</strong>.  
+            Se il gioco è fluido e vuoi più qualità, prova <strong>Alta</strong>.
+          </div>
+        </div>
+
+        <h3>4.1 Limite di FPS</h3>
+        <div class="cmd-group">
+          <div class="cmd-row">
+            <div class="cmd-name"><span class="dot"></span><span>t.MaxFPS 0</span></div>
+            <div class="cmd-desc">
+              Nessun limite di FPS.
+            </div>
+          </div>
+          <div class="cmd-row">
+            <div class="cmd-name"><span class="dot"></span><span>t.MaxFPS 60</span></div>
+            <div class="cmd-desc">
+              Limita il gioco a 60 FPS (puoi usare anche 30, 120, 144, ecc.).
+              <div class="cmd-tag-row">
+                <span class="cmd-tag">Stabilità</span>
+                <span class="cmd-tag">Riduzione carico</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <p>Consigliato quando:</p>
+        <ul class="compact">
+          <li>il PC scalda troppo</li>
+          <li>la GPU è costantemente al 100%</li>
+          <li>preferisci un frame rate più stabile</li>
+        </ul>
+
+        <h3>4.2 VSync (sincronizzazione verticale)</h3>
+
+        <div class="cmd-group">
+          <div class="cmd-row">
+            <div class="cmd-name"><span class="dot"></span><span>r.VSync 1</span></div>
+            <div class="cmd-desc">
+              VSync attivo: riduce il tearing verticale, può causare piccoli cali di FPS.
+            </div>
+          </div>
+          <div class="cmd-row">
+            <div class="cmd-name"><span class="dot"></span><span>r.VSync 0</span></div>
+            <div class="cmd-desc">
+              VSync disattivo: più FPS possibili, ma può comparire tearing.
+            </div>
+          </div>
+        </div>
+
+        <h3>4.3 Risoluzione interna (Screen Percentage)</h3>
+
+        <div class="cmd-group">
+          <div class="cmd-row">
+            <div class="cmd-name"><span class="dot"></span><span>r.ScreenPercentage 100</span></div>
+            <div class="cmd-desc">Qualità normale (100% della risoluzione).</div>
+          </div>
+          <div class="cmd-row">
+            <div class="cmd-name"><span class="dot"></span><span>r.ScreenPercentage 80</span></div>
+            <div class="cmd-desc">Leggero boost di performance con perdita minima di qualità.</div>
+          </div>
+          <div class="cmd-row">
+            <div class="cmd-name"><span class="dot"></span><span>r.ScreenPercentage 70</span></div>
+            <div class="cmd-desc">Qualità ridotta, utile su PC più deboli.</div>
+          </div>
+        </div>
+
+        <p><strong>Suggerimento:</strong></p>
+        <pre><code>r.ScreenPercentage 80</code></pre>
+        <p>
+          Se il gioco è ancora troppo pesante, scendi a <code>70</code>.
+        </p>
+
+        <h3>4.4 Preset grafici consigliati</h3>
+        <p>
+          I seguenti comandi regolano i “gruppi di qualità” dell’engine. Valori validi:
+          <code>0</code> (molto basso) → <code>4</code> (molto alto / cinematico).
+        </p>
+        <ul class="compact">
+          <li><code>sg.ViewDistance X</code> – distanza di visualizzazione oggetti</li>
+          <li><code>sg.ShadowQuality X</code> – qualità ombre</li>
+          <li><code>sg.PostProcessQuality X</code> – effetti post-process (bloom, DOF, ecc.)</li>
+          <li><code>sg.TextureQuality X</code> – qualità texture</li>
+          <li><code>sg.EffectsQuality X</code> – particelle / effetti</li>
+          <li><code>sg.FoliageQuality X</code> – vegetazione</li>
+          <li><code>sg.ReflectionQuality X</code> – riflessi</li>
+          <li>(se presente) <code>sg.GlobalIlluminationQuality X</code> – illuminazione globale</li>
+        </ul>
+
+        <h3>4.4.1 Preset “Bassa qualità” (PC deboli)</h3>
+        <pre><code>sg.ViewDistance 1
+sg.ShadowQuality 1
+sg.PostProcessQuality 1
+sg.TextureQuality 1
+sg.EffectsQuality 1
+sg.FoliageQuality 0
+sg.ReflectionQuality 1
+r.ScreenPercentage 80</code></pre>
+
+        <h3>4.4.2 Preset “Media qualità” (equilibrato)</h3>
+        <pre><code>sg.ViewDistance 2
+sg.ShadowQuality 2
+sg.PostProcessQuality 2
+sg.TextureQuality 3
+sg.EffectsQuality 2
+sg.FoliageQuality 2
+sg.ReflectionQuality 2
+r.ScreenPercentage 100</code></pre>
+
+        <h3>4.4.3 Preset “Alta qualità” (PC buoni)</h3>
+        <pre><code>sg.ViewDistance 3
+sg.ShadowQuality 3
+sg.PostProcessQuality 3
+sg.TextureQuality 4
+sg.EffectsQuality 3
+sg.FoliageQuality 3
+sg.ReflectionQuality 3
+r.ScreenPercentage 100</code></pre>
+
+        <div class="callout danger">
+          <div class="callout-label">Attenzione</div>
+          <div>
+            Se con il preset “Alta qualità” il gioco subisce forti cali di performance, torna a <strong>Media qualità</strong>.
+          </div>
+        </div>
+      </section>
+
+      <!-- 5. Comfort visivo -->
+      <section id="comfort">
+        <h2>5. Comfort visivo <span class="section-label">FOV &amp; motion blur</span></h2>
+
+        <h3>5.1 Campo visivo (FOV)</h3>
+
+        <p>Valori comuni:</p>
+        <ul class="compact">
+          <li><code>fov 80</code> · per schermi più piccoli o giocatori sensibili al motion sickness</li>
+          <li><code>fov 90</code> · valore intermedio consigliato</li>
+          <li><code>fov 100</code> · per chi preferisce un campo visivo più ampio</li>
+        </ul>
+
+        <p>
+          Se ti gira la testa o ti senti “stretto” sullo schermo, prova <code>fov 90</code>.
+        </p>
+
+        <h3>5.2 Motion blur</h3>
+        <p>
+          L’uso del motion blur dipende da come è stata configurata la build. Se supportato, alcuni comandi tipici sono:
+        </p>
+
+        <div class="cmd-group">
+          <div class="cmd-row">
+            <div class="cmd-name"><span class="dot"></span><span>r.MotionBlurQuality 0</span></div>
+            <div class="cmd-desc">Disattiva il motion blur.</div>
+          </div>
+          <div class="cmd-row">
+            <div class="cmd-name"><span class="dot"></span><span>r.MotionBlurQuality 2</span></div>
+            <div class="cmd-desc">Imposta un livello medio di motion blur.</div>
+          </div>
+          <div class="cmd-row">
+            <div class="cmd-name"><span class="dot"></span><span>r.MotionBlur.Amount 0.0</span></div>
+            <div class="cmd-desc">Nessun blur (se supportato).</div>
+          </div>
+          <div class="cmd-row">
+            <div class="cmd-name"><span class="dot"></span><span>r.MotionBlur.Amount 0.5</span></div>
+            <div class="cmd-desc">Blur moderato.</div>
+          </div>
+        </div>
+
+        <p><strong>Per ridurre il fastidio visivo:</strong></p>
+        <pre><code>r.MotionBlurQuality 0
+r.MotionBlur.Amount 0.0</code></pre>
+        <p>(solo se la build supporta questi comandi)</p>
+      </section>
+
+      <!-- 6. Debug leggero -->
+      <section id="debug" class="alt">
+        <h2>6. Comandi di debug “leggeri” per QA <span class="section-label">Senza rompere il bilanciamento</span></h2>
+
+        <p>
+          Questi comandi aiutano il testing senza stravolgere il gioco. Se non funzionano, potrebbero essere stati disattivati.
+        </p>
+
+        <h3>6.1 Collisioni e navigazione</h3>
+        <div class="cmd-group">
+          <div class="cmd-row">
+            <div class="cmd-name"><span class="dot"></span><span>show Collision</span></div>
+            <div class="cmd-desc">Mostra le collisioni delle mesh.</div>
+          </div>
+          <div class="cmd-row">
+            <div class="cmd-name"><span class="dot"></span><span>show Navigation</span></div>
+            <div class="cmd-desc">Mostra il navmesh (zone in cui l’IA può muoversi).</div>
+          </div>
+        </div>
+
+        <h3>6.2 Camera e debug visuale</h3>
+        <div class="cmd-group">
+          <div class="cmd-row">
+            <div class="cmd-name"><span class="dot"></span><span>toggledebugcamera</span></div>
+            <div class="cmd-desc">Attiva una camera libera di debug, potenzialmente con info aggiuntive.</div>
+          </div>
+          <div class="cmd-row">
+            <div class="cmd-name"><span class="dot"></span><span>showflag.PostProcessing 0</span></div>
+            <div class="cmd-desc">Disattiva il post-process (utile per vedere il gioco “pulito”).</div>
+          </div>
+          <div class="cmd-row">
+            <div class="cmd-name"><span class="dot"></span><span>showflag.PostProcessing 1</span></div>
+            <div class="cmd-desc">Riattiva il post-process.</div>
+          </div>
+        </div>
+
+        <h3>6.3 Debug della rete (se il gioco è multiplayer)</h3>
+        <div class="cmd-group">
+          <div class="cmd-row">
+            <div class="cmd-name"><span class="dot"></span><span>stat net</span></div>
+            <div class="cmd-desc">Mostra ping, packet loss, bandwidth e altre informazioni di rete.</div>
+          </div>
+        </div>
+
+        <p><strong>Comandi avanzati</strong> (usali solo se richiesto espressamente):</p>
+        <div class="cmd-group">
+          <div class="cmd-row">
+            <div class="cmd-name"><span class="dot"></span><span>net pktlag=XX</span></div>
+            <div class="cmd-desc">Simula lag in millisecondi, es. <code>net pktlag=150</code>.</div>
+          </div>
+          <div class="cmd-row">
+            <div class="cmd-name"><span class="dot"></span><span>net pktloss=XX</span></div>
+            <div class="cmd-desc">Simula perdita di pacchetti in %, es. <code>net pktloss=5</code>.</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 7. Comandi per bug -->
+      <section id="bug">
+        <h2>7. Comandi per segnare e riprodurre bug <span class="section-label">Posizioni &amp; screenshot</span></h2>
+
+        <p>
+          Se il progetto li supporta, questi comandi sono molto utili per riprodurre bug in modo preciso.
+        </p>
+
+        <div class="cmd-group">
+          <div class="cmd-row">
+            <div class="cmd-name"><span class="dot"></span><span>BugIt</span></div>
+            <div class="cmd-desc">
+              Salva uno screenshot e la posizione del giocatore nei log. Utile per lo sviluppatore per saltare direttamente al punto del bug.
+            </div>
+          </div>
+          <div class="cmd-row">
+            <div class="cmd-name"><span class="dot"></span><span>BugItGo X Y Z Yaw Pitch Roll</span></div>
+            <div class="cmd-desc">
+              Teletrasporta il giocatore a una posizione precisa salvata in precedenza.
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 8. Come riportare un bug -->
+      <section id="report" class="alt">
+        <h2>8. Come riportare un bug usando questi comandi <span class="section-label">Checklist per le segnalazioni</span></h2>
+
+        <p>
+          Quando segnali un problema, cerca di includere più informazioni possibili. Una buona segnalazione dovrebbe contenere:
+        </p>
+
+        <ol style="margin:0.4rem 0 0.6rem 1.1rem; padding:0; color:var(--text-muted); font-size:0.9rem; line-height:1.5;">
+          <li>
+            <strong>Descrizione breve del problema</strong><br>
+            Esempio: “Il gioco cala a 25 FPS quando entro nella stanza grande del castello”.
+          </li>
+          <li>
+            <strong>Preset usato</strong><br>
+            Bassa / Media / Alta oppure i comandi principali che hai impostato (<code>r.ScreenPercentage</code>, <code>sg.*</code>, ecc.).
+          </li>
+          <li>
+            <strong>Comandi attivi al momento del bug</strong><br>
+            Per esempio:
+            <ul class="compact">
+              <li><code>stat fps</code></li>
+              <li><code>stat unit</code></li>
+              <li>altri eventualmente richiesti (es. <code>stat memory</code>, <code>stat net</code>)</li>
+            </ul>
+          </li>
+          <li>
+            <strong>Screenshot o video</strong><br>
+            Se possibile, includi un’immagine o un clip con i numeri a schermo (<code>stat fps</code>, <code>stat unit</code>).
+          </li>
+          <li>
+            <strong>Passi per riprodurre</strong><br>
+            Esempio: “Carico la mappa X → vado verso la porta a sinistra → entro nella stanza → giro la camera verso il centro”.
+          </li>
+        </ol>
+
+        <div class="callout">
+          <div class="callout-label">Nota</div>
+          <div>
+            Questo documento copre i comandi console principali pensati per i beta tester.  
+            Comandi extra o specifici del progetto possono essere aggiunti in una sezione dedicata (teletrasporti interni, feature sperimentali, salti rapidi a livelli o cutscene).
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+</body>
+</html>
