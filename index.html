@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <title>FrancoGame - Indice documentazione</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark light">
+
+  <script>
+    (function() {
+      const storageKey = 'francogame-theme';
+      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      let saved = null;
+
+      try { saved = localStorage.getItem(storageKey); } catch (_) {}
+
+      const mode = saved === 'light' || saved === 'dark' ? saved : 'system';
+      const resolved = mode === 'dark' ? 'dark' : mode === 'light' ? 'light' : (prefersDark ? 'dark' : 'light');
+      document.documentElement.classList.add(resolved === 'dark' ? 'theme-dark' : 'theme-light');
+    })();
+  </script>
+
+  <link rel="stylesheet" href="./assets/style.css">
+
+</head>
+<body>
+
+  <aside class="sidebar">
+    <div class="sidebar-header">
+      <div class="logo-circle">FG</div>
+      <div class="sidebar-title-block">
+        <div class="sidebar-title">FrancoGame</div>
+        <div class="sidebar-subtitle">Indice documentazione</div>
+      </div>
+      <div style="margin-left:auto; display:flex; align-items:center; gap:0.5rem;">
+        <label for="themeSelect" style="font-size:0.75rem; color:var(--text-soft);">Tema</label>
+        <select id="themeSelect" aria-label="Seleziona tema" style="background:var(--bg-elevated); color:var(--text-main); border:1px solid var(--border-subtle); padding:0.22rem 0.4rem; border-radius:6px;">
+          <option value="system">Sistema</option>
+          <option value="light">Chiaro</option>
+          <option value="dark">Scuro</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="badge-engine">Unreal Engine 5.5.4</div>
+
+    <div class="sidebar-note">
+      Usa questo indice per aprire le pagine disponibili mentre il progetto cresce.
+    </div>
+
+    <div>
+      <p class="nav-section-title">Sezioni</p>
+      <ul class="nav-list">
+        <li><a href="#docs"><span class="nav-bullet"></span><span class="section-index">1.</span> Pagine disponibili</a></li>
+      </ul>
+    </div>
+
+    <div class="nav-footer">
+      Elenco aggiornato delle guide interne.
+      <small>Le nuove sezioni verranno aggiunte qui man mano.</small>
+      <div class="nav-footer-code">
+        <span class="nav-footer-dot"></span>
+        <span>Serve altro? Contatta lo sviluppatore.</span>
+      </div>
+    </div>
+  </aside>
+
+  <main class="content">
+    <div class="content-inner">
+
+      <header class="page-header">
+        <h1 class="page-title">Indice della documentazione</h1>
+        <p class="page-subtitle">
+          Punto di ingresso per tutte le pagine di supporto a FrancoGame. Per ora e disponibile una sola guida.
+        </p>
+        <div class="tag-row">
+          <div class="tag-pill"><strong>Stato</strong> - In costruzione</div>
+          <div class="tag-pill"><strong>Pagine</strong> - 1 disponibile</div>
+          <div class="tag-pill"><strong>Ultimo aggiornamento</strong> - Beta tester</div>
+        </div>
+      </header>
+
+      <section id="docs">
+        <h2>1. Pagine disponibili <span class="section-label">Seleziona e apri</span></h2>
+        <p>
+          Questo indice raccoglie le pagine utili per il testing. Aggiungeremo nuove voci quando altre guide saranno pronte.
+        </p>
+
+        <div class="cmd-group">
+          <div class="cmd-row">
+            <div class="cmd-name"><span class="dot"></span><span>Comandi console (Beta tester)</span></div>
+            <div class="cmd-desc">
+              Guida rapida ai comandi console per gestire grafica, performance e debug nelle build interne.
+              <div class="cmd-tag-row">
+                <span class="cmd-tag">Console</span>
+                <span class="cmd-tag">QA</span>
+                <a href="./beta-tester/index.html" class="cmd-tag" style="text-decoration:none;">Apri pagina</a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="callout">
+          <div class="callout-label">Nota</div>
+          <div>
+            Questo elenco e pensato come hub principale. Quando saranno pronte nuove guide (es. installazione, design notes, changelog) compariranno qui.
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <script>
+    (function() {
+      const select = document.getElementById('themeSelect');
+      const storageKey = 'francogame-theme';
+      const prefersDarkMQ = window.matchMedia('(prefers-color-scheme: dark)');
+      const colorSchemeMeta = document.querySelector('meta[name="color-scheme"]');
+
+      const safeGet = () => {
+        try { return localStorage.getItem(storageKey) || 'system'; } catch (_) { return 'system'; }
+      };
+
+      const safeSet = (val) => {
+        try { localStorage.setItem(storageKey, val); } catch (_) {}
+      };
+
+      function applyTheme(mode) {
+        const resolved = mode === 'dark'
+          ? 'dark'
+          : mode === 'light'
+            ? 'light'
+            : (prefersDarkMQ.matches ? 'dark' : 'light');
+
+        document.documentElement.classList.toggle('theme-dark', resolved === 'dark');
+        document.documentElement.classList.toggle('theme-light', resolved === 'light');
+        colorSchemeMeta?.setAttribute('content', resolved === 'dark' ? 'dark light' : 'light dark');
+      }
+
+      const saved = safeGet();
+      select.value = saved;
+      applyTheme(saved);
+
+      select.addEventListener('change', function() {
+        const val = select.value;
+        safeSet(val);
+        applyTheme(val);
+      });
+
+      prefersDarkMQ.addEventListener('change', () => {
+        if (safeGet() === 'system') {
+          applyTheme('system');
+        }
+      });
+    })();
+  </script>
+
+</body>
+</html>
