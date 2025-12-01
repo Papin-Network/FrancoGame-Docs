@@ -4,12 +4,12 @@
 Documentazione e materiali di supporto per i tester di FrancoGame (build interne). Qui trovi pagine statiche con istruzioni rapide per download, setup e uso dei comandi console.
 
 ## Struttura
-- `beta-tester/index.html` – guida per i tester: comandi console, preset grafici, checklist bug e istruzioni per aprire issue su GitHub.
+- [`beta-tester/index.html`](https://papin-network.github.io/FrancoGame-Docs/beta-tester/) – guida per i tester: comandi console, preset grafici, checklist bug e istruzioni per aprire issue su GitHub.
 - `assets/` – fogli di stile, immagini e risorse condivise dalla guida.
 - `.github/` – workflow/configurazioni di supporto.
 
 ## Come visualizzare
-Apri `beta-tester/index.html` nel browser (doppio click da file system). La pagina include selettore di tema (chiaro/scuro/sistema) e navigazione laterale.
+Apri [la pagina principale](https://papin-network.github.io/FrancoGame-Docs/) nel browser (doppio click da file system). La pagina include l'indice delle varie paginecon selezione del tema (chiaro/scuro/sistema) e navigazione laterale.
 
 ## Segnalazione bug
 Segui la sezione 8 della guida:
