@@ -1,5 +1,5 @@
 # FrancoGame Docs
-[![pages-build-deployment](https://github.com/Papin-Network/FrancoGame-Docs/actions/workflows/pages/pages-build-deployment/badge.svg)](https://github.com/Papin-Network/FrancoGame-Docs/actions/workflows/pages/pages-build-deployment)
+[![pages-build-deployment](https://github.com/Papin-Network/FrancoGame-Docs/actions/workflows/pages/pages-build-deployment/badge.svg)](https://github.com/Papin-Network/FrancoGame-Docs/actions/workflows/pages/pages-build-deployment) [![discord-notification](https://github.com/Papin-Network/FrancoGame-Docs/actions/workflows/discord_notify.yml/badge.svg)](https://github.com/Papin-Network/FrancoGame-Docs/actions/workflows/discord_notify.yml)
 
 Documentazione e materiali di supporto per i tester di FrancoGame (build interne). Qui trovi pagine statiche con istruzioni rapide per download, setup e uso dei comandi console.
 
