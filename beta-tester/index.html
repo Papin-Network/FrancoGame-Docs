@@ -272,13 +272,13 @@
         <h3>4.1 Limite di FPS</h3>
         <div class="cmd-group">
           <div class="cmd-row">
-            <div class="cmd-name"><span class="dot"></span><span>t.MaxFPS 0</span></div>
+            <div class="cmd-name"><span class="dot"></span><span class="tooltip-term" data-tooltip="Nessun limite: usa tutta la potenza disponibile, FPS variabili.">t.MaxFPS 0</span></div>
             <div class="cmd-desc">
               Nessun limite di FPS.
             </div>
           </div>
           <div class="cmd-row">
-            <div class="cmd-name"><span class="dot"></span><span>t.MaxFPS 60</span></div>
+            <div class="cmd-name"><span class="dot"></span><span class="tooltip-term" data-tooltip="Blocca gli FPS a 60: riduce carico/temperature e rende il frame rate piu stabile.">t.MaxFPS 60</span></div>
             <div class="cmd-desc">
               Limita il gioco a 60 FPS (puoi usare anche 30, 120, 144, ecc.).
               <div class="cmd-tag-row">
@@ -292,7 +292,7 @@
         <p>Consigliato quando:</p>
         <ul class="compact">
           <li>il PC scalda troppo</li>
-          <li>la GPU è costantemente al 100%</li>
+          <li>la <span class="tooltip-term" data-tooltip="La scheda video: gestisce il rendering del gioco.">GPU</span> è costantemente al 100%</li>
           <li>preferisci un frame rate più stabile</li>
         </ul>
 
