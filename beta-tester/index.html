@@ -21,6 +21,34 @@
   </script>
 
   <link rel="stylesheet" href="../assets/style.css">
+  <style>
+    .tooltip-term { position: relative; cursor: help; border-bottom: 1px dashed var(--border-subtle); }
+    .tooltip-enabled .tooltip-term::after {
+      content: attr(data-tooltip);
+      position: absolute;
+      left: 0;
+      top: calc(100% + 0.4rem);
+      background: var(--bg-elevated);
+      color: var(--text-main);
+      border: 1px solid var(--border-subtle);
+      padding: 0.45rem 0.55rem;
+      border-radius: 10px;
+      box-shadow: var(--shadow-elevated);
+      max-width: 18rem;
+      width: max-content;
+      white-space: normal;
+      opacity: 0;
+      transform: translateY(-2px);
+      transition: opacity 0.15s ease, transform 0.15s ease;
+      pointer-events: none;
+      z-index: 30;
+    }
+    .tooltip-enabled .tooltip-term:hover::after,
+    .tooltip-enabled .tooltip-term:focus-visible::after {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  </style>
 
 </head>
 <body>
@@ -47,6 +75,16 @@
     <div class="sidebar-note">
       Usa questa pagina come riferimento durante il testing.<br>
       <strong>I comandi vanno digitati nella console in gioco</strong> e confermati con Invio.
+    </div>
+
+    <div style="margin:0.75rem 0 1rem; padding:0.75rem; background:var(--bg-elevated); border:1px solid var(--border-subtle); border-radius:0.9rem; display:flex; gap:0.6rem; align-items:flex-start;">
+      <input id="tooltipToggle" type="checkbox" checked aria-label="Attiva spiegazioni termini tecnici" style="margin-top:0.25rem; accent-color:var(--accent, #7f8cff);">
+      <div>
+        <label for="tooltipToggle" style="display:block; font-weight:600; color:var(--text-main);">Spiegazioni termini tecnici</label>
+        <p style="margin:0.2rem 0 0; color:var(--text-soft); font-size:0.9rem; line-height:1.4;">
+          Quando attivo, passa col mouse sui termini evidenziati per vedere una descrizione semplice.
+        </p>
+      </div>
     </div>
 
     <div>
@@ -177,14 +215,14 @@
 
         <div class="cmd-group">
           <div class="cmd-row">
-            <div class="cmd-name"><span class="dot"></span><span>stat fps</span></div>
+            <div class="cmd-name"><span class="dot"></span><span class="tooltip-term" data-tooltip="Mostra i frame al secondo in tempo reale.">stat fps</span></div>
             <div class="cmd-desc">
               Mostra gli FPS (frame al secondo) in tempo reale.
             </div>
           </div>
 
           <div class="cmd-row">
-            <div class="cmd-name"><span class="dot"></span><span>stat unit</span></div>
+            <div class="cmd-name"><span class="dot"></span><span class="tooltip-term" data-tooltip="Divide il tempo di ogni frame tra logica di gioco, render CPU e GPU.">stat unit</span></div>
             <div class="cmd-desc">
               Mostra i tempi principali:
               <ul class="compact">
@@ -197,14 +235,14 @@
           </div>
 
           <div class="cmd-row">
-            <div class="cmd-name"><span class="dot"></span><span>stat unitgraph</span></div>
+            <div class="cmd-name"><span class="dot"></span><span class="tooltip-term" data-tooltip="Come stat unit ma con grafico temporale per vedere i picchi.">stat unitgraph</span></div>
             <div class="cmd-desc">
               Come <code>stat unit</code>, ma con un grafico temporale che mostra l'andamento nel tempo.
             </div>
           </div>
 
           <div class="cmd-row">
-            <div class="cmd-name"><span class="dot"></span><span>stat memory</span></div>
+            <div class="cmd-name"><span class="dot"></span><span class="tooltip-term" data-tooltip="Mostra quanta RAM usa il gioco.">stat memory</span></div>
             <div class="cmd-desc">
               Mostra l'uso di memoria (utile su macchine con poca RAM o grossi caricamenti).
             </div>
@@ -262,13 +300,13 @@
 
         <div class="cmd-group">
           <div class="cmd-row">
-            <div class="cmd-name"><span class="dot"></span><span>r.VSync 1</span></div>
+            <div class="cmd-name"><span class="dot"></span><span class="tooltip-term" data-tooltip="Sincronizza i frame con il refresh del monitor: meno tearing, possibili FPS piu bassi.">r.VSync 1</span></div>
             <div class="cmd-desc">
               VSync attivo: riduce il tearing verticale, può causare piccoli cali di FPS.
             </div>
           </div>
           <div class="cmd-row">
-            <div class="cmd-name"><span class="dot"></span><span>r.VSync 0</span></div>
+            <div class="cmd-name"><span class="dot"></span><span class="tooltip-term" data-tooltip="Disattiva la sincronizzazione: massimi FPS ma il tearing puo essere visibile.">r.VSync 0</span></div>
             <div class="cmd-desc">
               VSync disattivo: più FPS possibili, ma può comparire tearing.
             </div>
@@ -279,15 +317,15 @@
 
         <div class="cmd-group">
           <div class="cmd-row">
-            <div class="cmd-name"><span class="dot"></span><span>r.ScreenPercentage 100</span></div>
+            <div class="cmd-name"><span class="dot"></span><span class="tooltip-term" data-tooltip="Renderizza alla risoluzione piena: massima nitidezza, piu carico per la GPU.">r.ScreenPercentage 100</span></div>
             <div class="cmd-desc">Qualità normale (100% della risoluzione).</div>
           </div>
           <div class="cmd-row">
-            <div class="cmd-name"><span class="dot"></span><span>r.ScreenPercentage 80</span></div>
+            <div class="cmd-name"><span class="dot"></span><span class="tooltip-term" data-tooltip="Renderizza all'80% della risoluzione: alleggerisce la GPU con perdita visiva limitata.">r.ScreenPercentage 80</span></div>
             <div class="cmd-desc">Leggero boost di performance con perdita minima di qualità.</div>
           </div>
           <div class="cmd-row">
-            <div class="cmd-name"><span class="dot"></span><span>r.ScreenPercentage 70</span></div>
+            <div class="cmd-name"><span class="dot"></span><span class="tooltip-term" data-tooltip="Renderizza al 70%: immagine piu morbida ma performance sensibilmente migliori.">r.ScreenPercentage 70</span></div>
             <div class="cmd-desc">Qualità ridotta, utile su PC più deboli.</div>
           </div>
         </div>
@@ -376,19 +414,19 @@ r.ScreenPercentage 100</code></pre>
 
         <div class="cmd-group">
           <div class="cmd-row">
-            <div class="cmd-name"><span class="dot"></span><span>r.MotionBlurQuality 0</span></div>
+            <div class="cmd-name"><span class="dot"></span><span class="tooltip-term" data-tooltip="Disattiva il motion blur per un'immagine piu nitida.">r.MotionBlurQuality 0</span></div>
             <div class="cmd-desc">Disattiva il motion blur.</div>
           </div>
           <div class="cmd-row">
-            <div class="cmd-name"><span class="dot"></span><span>r.MotionBlurQuality 2</span></div>
+            <div class="cmd-name"><span class="dot"></span><span class="tooltip-term" data-tooltip="Applica un livello medio di motion blur, utile per smussare i movimenti.">r.MotionBlurQuality 2</span></div>
             <div class="cmd-desc">Imposta un livello medio di motion blur.</div>
           </div>
           <div class="cmd-row">
-            <div class="cmd-name"><span class="dot"></span><span>r.MotionBlur.Amount 0.0</span></div>
+            <div class="cmd-name"><span class="dot"></span><span class="tooltip-term" data-tooltip="Setta a zero l'intensita del blur: immagine stabile.">r.MotionBlur.Amount 0.0</span></div>
             <div class="cmd-desc">Nessun blur (se supportato).</div>
           </div>
           <div class="cmd-row">
-            <div class="cmd-name"><span class="dot"></span><span>r.MotionBlur.Amount 0.5</span></div>
+            <div class="cmd-name"><span class="dot"></span><span class="tooltip-term" data-tooltip="Quantita moderata di blur: addolcisce i movimenti ma riduce la nitidezza.">r.MotionBlur.Amount 0.5</span></div>
             <div class="cmd-desc">Blur moderato.</div>
           </div>
         </div>
@@ -414,7 +452,7 @@ r.MotionBlur.Amount 0.0</code></pre>
             <div class="cmd-desc">Mostra le collisioni delle mesh.</div>
           </div>
           <div class="cmd-row">
-            <div class="cmd-name"><span class="dot"></span><span>show Navigation</span></div>
+            <div class="cmd-name"><span class="dot"></span><span class="tooltip-term" data-tooltip="Evidenzia il navmesh: le aree dove l'IA puo muoversi.">show Navigation</span></div>
             <div class="cmd-desc">Mostra il navmesh (zone in cui l'IA può muoversi).</div>
           </div>
         </div>
@@ -426,11 +464,11 @@ r.MotionBlur.Amount 0.0</code></pre>
             <div class="cmd-desc">Attiva una camera libera di debug, potenzialmente con info aggiuntive.</div>
           </div>
           <div class="cmd-row">
-            <div class="cmd-name"><span class="dot"></span><span>showflag.PostProcessing 0</span></div>
+            <div class="cmd-name"><span class="dot"></span><span class="tooltip-term" data-tooltip="Disattiva tutti gli effetti di post-process per vedere l'immagine grezza.">showflag.PostProcessing 0</span></div>
             <div class="cmd-desc">Disattiva il post-process (utile per vedere il gioco "pulito").</div>
           </div>
           <div class="cmd-row">
-            <div class="cmd-name"><span class="dot"></span><span>showflag.PostProcessing 1</span></div>
+            <div class="cmd-name"><span class="dot"></span><span class="tooltip-term" data-tooltip="Riattiva gli effetti di post-process (bloom, DOF, ecc.).">showflag.PostProcessing 1</span></div>
             <div class="cmd-desc">Riattiva il post-process.</div>
           </div>
         </div>
@@ -438,7 +476,7 @@ r.MotionBlur.Amount 0.0</code></pre>
         <h3>6.3 Debug della rete (se il gioco è multiplayer)</h3>
         <div class="cmd-group">
           <div class="cmd-row">
-            <div class="cmd-name"><span class="dot"></span><span>stat net</span></div>
+            <div class="cmd-name"><span class="dot"></span><span class="tooltip-term" data-tooltip="Pannello rete: mostra ping, perdita pacchetti e banda.">stat net</span></div>
             <div class="cmd-desc">Mostra ping, packet loss, bandwidth e altre informazioni di rete.</div>
           </div>
         </div>
@@ -466,13 +504,13 @@ r.MotionBlur.Amount 0.0</code></pre>
 
         <div class="cmd-group">
           <div class="cmd-row">
-            <div class="cmd-name"><span class="dot"></span><span>BugIt</span></div>
+            <div class="cmd-name"><span class="dot"></span><span class="tooltip-term" data-tooltip="Comando UE per salvare screenshot e coordinate in un colpo solo.">BugIt</span></div>
             <div class="cmd-desc">
               Salva uno screenshot e la posizione del giocatore nei log. Utile per lo sviluppatore per saltare direttamente al punto del bug.
             </div>
           </div>
           <div class="cmd-row">
-            <div class="cmd-name"><span class="dot"></span><span>BugItGo X Y Z Yaw Pitch Roll</span></div>
+            <div class="cmd-name"><span class="dot"></span><span class="tooltip-term" data-tooltip="Teletrasporta il giocatore su coordinate salvate da BugIt (posizione + rotazione).">BugItGo X Y Z Yaw Pitch Roll</span></div>
             <div class="cmd-desc">
               Teletrasporta il giocatore a una posizione precisa salvata in precedenza.
             </div>
@@ -550,6 +588,8 @@ r.MotionBlur.Amount 0.0</code></pre>
       const storageKey = 'francogame-theme';
       const prefersDarkMQ = window.matchMedia('(prefers-color-scheme: dark)');
       const colorSchemeMeta = document.querySelector('meta[name="color-scheme"]');
+      const tooltipToggle = document.getElementById('tooltipToggle');
+      const tooltipKey = 'francogame-tooltips';
 
       const safeGet = () => {
         try { return localStorage.getItem(storageKey) || 'system'; } catch (_) { return 'system'; }
@@ -571,6 +611,18 @@ r.MotionBlur.Amount 0.0</code></pre>
         colorSchemeMeta?.setAttribute('content', resolved === 'dark' ? 'dark light' : 'light dark');
       }
 
+      function safeGetTooltip() {
+        try { return localStorage.getItem(tooltipKey); } catch (_) { return null; }
+      }
+
+      function safeSetTooltip(val) {
+        try { localStorage.setItem(tooltipKey, val); } catch (_) {}
+      }
+
+      function applyTooltip(enabled) {
+        document.documentElement.classList.toggle('tooltip-enabled', enabled);
+      }
+
       const saved = safeGet();
       select.value = saved;
       applyTheme(saved);
@@ -580,6 +632,19 @@ r.MotionBlur.Amount 0.0</code></pre>
         safeSet(val);
         applyTheme(val);
       });
+
+      const savedTooltip = safeGetTooltip();
+      const tooltipEnabled = savedTooltip === null ? true : savedTooltip === 'on';
+      applyTooltip(tooltipEnabled);
+
+      if (tooltipToggle) {
+        tooltipToggle.checked = tooltipEnabled;
+        tooltipToggle.addEventListener('change', function() {
+          const enabled = tooltipToggle.checked;
+          safeSetTooltip(enabled ? 'on' : 'off');
+          applyTooltip(enabled);
+        });
+      }
 
       prefersDarkMQ.addEventListener('change', () => {
         if (safeGet() === 'system') {
