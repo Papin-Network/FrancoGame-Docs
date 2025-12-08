@@ -1,0 +1,82 @@
+name: Sync build version
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "23 */6 * * *"
+  push:
+    paths:
+      - ".github/workflows/sync-version.yml"
+
+permissions:
+  contents: write
+
+jobs:
+  sync-version:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Fetch version from main game repo
+        id: fetch
+        env:
+          SOURCE_REPO: Papin-Network/FrancoGame
+          GH_TOKEN: ${{ secrets.FRANCOGAME_READ_TOKEN }}
+        run: |
+          set -euo pipefail
+
+          if [ -z "${GH_TOKEN:-}" ]; then
+            echo "Secret FRANCOGAME_READ_TOKEN non impostato, skip sync."
+            exit 0
+          fi
+
+          tmp_ini="$(mktemp)"
+          if ! curl -fL \
+            -H "Authorization: Bearer ${GH_TOKEN}" \
+            -H "Accept: application/vnd.github.v3.raw" \
+            "https://api.github.com/repos/${SOURCE_REPO}/contents/Config/DefaultEngine.ini" \
+            -o "${tmp_ini}"; then
+            echo "Impossibile scaricare DefaultEngine.ini dal repo principale." >&2
+            exit 1
+          fi
+
+          version="$(grep -E '^Version=' "${tmp_ini}" | head -n1 | sed 's/^Version=//' | tr -d '\r')"
+          if [ -z "${version}" ]; then
+            echo "Campo Version= non trovato in DefaultEngine.ini" >&2
+            exit 1
+          fi
+
+          mkdir -p Config assets
+
+          printf "Version=%s\n" "${version}" > Config/DefaultEngine.ini
+
+          cat > assets/version.json <<EOF
+          {
+            "version": "${version}",
+            "source_repo": "${SOURCE_REPO}",
+            "source_path": "Config/DefaultEngine.ini",
+            "fetched_at": "$(date -u +%Y-%m-%dT%H:%M:%SZ)"
+          }
+          EOF
+
+          echo "version=${version}" >> "$GITHUB_OUTPUT"
+
+      - name: Commit and push if changed
+        if: steps.fetch.outputs.version != ''
+        run: |
+          set -euo pipefail
+
+          if git diff --quiet --exit-code Config/DefaultEngine.ini assets/version.json; then
+            echo "Nessuna variazione, nulla da committare."
+            exit 0
+          fi
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          git add Config/DefaultEngine.ini assets/version.json
+          git commit -m "chore: sync version.json from game repo (${steps.fetch.outputs.version})"
+          git push

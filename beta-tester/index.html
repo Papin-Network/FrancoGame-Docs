@@ -119,7 +119,7 @@
         Ultima build
       </div>
       <div class="version-value" id="buildVersionValue">Caricamento...</div>
-      <div class="version-source">Letta da Config/DefaultEngine.ini</div>
+      <div class="version-source">Sincronizzata da FrancoGame/Config/DefaultEngine.ini</div>
     </div>
 
     <div class="sidebar-note">
@@ -674,6 +674,21 @@ r.MotionBlur.Amount 0.0</code></pre>
         document.documentElement.classList.toggle('tooltip-enabled', enabled);
       }
 
+      async function tryGetVersion(url, type) {
+        const response = await fetch(url, { cache: 'no-cache' });
+        if (!response.ok) return null;
+
+        if (type === 'json') {
+          const data = await response.json();
+          const candidate = data?.version || data?.Version || data?.VERSION;
+          return typeof candidate === 'string' ? candidate.trim() : candidate?.toString()?.trim();
+        }
+
+        const content = await response.text();
+        const match = content.match(/^\s*Version\s*=\s*([^\r\n#;]+)/mi);
+        return match && match[1] ? match[1].trim() : null;
+      }
+
       const saved = safeGet();
       select.value = saved;
       applyTheme(saved);
@@ -706,23 +721,22 @@ r.MotionBlur.Amount 0.0</code></pre>
       async function loadBuildVersion() {
         if (!versionValue) return;
         const targets = [
-          '../Config/DefaultEngine.ini',
-          'Config/DefaultEngine.ini',
-          './Config/DefaultEngine.ini',
-          'https://raw.githubusercontent.com/Papin-Network/FrancoGame-Docs/main/Config/DefaultEngine.ini',
-          'https://raw.githubusercontent.com/Papin-Network/FrancoGame/main/Config/DefaultEngine.ini'
+          { url: '../assets/version.json', type: 'json' },
+          { url: 'assets/version.json', type: 'json' },
+          { url: './assets/version.json', type: 'json' },
+          { url: '../Config/DefaultEngine.ini', type: 'ini' },
+          { url: 'Config/DefaultEngine.ini', type: 'ini' },
+          { url: './Config/DefaultEngine.ini', type: 'ini' },
+          { url: 'https://raw.githubusercontent.com/Papin-Network/FrancoGame-Docs/main/assets/version.json', type: 'json' },
+          { url: 'https://raw.githubusercontent.com/Papin-Network/FrancoGame-Docs/main/Config/DefaultEngine.ini', type: 'ini' },
+          { url: 'https://raw.githubusercontent.com/Papin-Network/FrancoGame/main/Config/DefaultEngine.ini', type: 'ini' }
         ];
 
-        for (const url of targets) {
+        for (const target of targets) {
           try {
-            const response = await fetch(url, { cache: 'no-cache' });
-            if (!response.ok) continue;
-
-            const content = await response.text();
-            const match = content.match(/^\s*Version\s*=\s*([^\r\n#;]+)/mi);
-
-            if (match && match[1]) {
-              versionValue.textContent = match[1].trim();
+            const version = await tryGetVersion(target.url, target.type);
+            if (version) {
+              versionValue.textContent = version;
               return;
             }
           } catch (_) {
