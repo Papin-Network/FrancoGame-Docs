@@ -48,6 +48,47 @@
       opacity: 1;
       transform: translateY(0);
     }
+    .version-box {
+      margin: 0.75rem 0 0.4rem;
+      padding: 0.7rem 0.85rem;
+      background: var(--bg-elevated);
+      border: 1px solid var(--border-subtle);
+      border-radius: 0.85rem;
+      box-shadow: var(--shadow-elevated);
+      line-height: 1.3;
+    }
+    .version-label {
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-soft);
+      font-weight: 700;
+    }
+    .version-dot {
+      width: 0.55rem;
+      height: 0.55rem;
+      border-radius: 50%;
+      background: var(--accent, #7f8cff);
+      box-shadow: 0 0 0 4px rgba(127, 140, 255, 0.15);
+    }
+    .version-value {
+      margin-top: 0.25rem;
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--text-main);
+    }
+    .version-source {
+      margin-top: 0.15rem;
+      color: var(--text-muted);
+      font-size: 0.83rem;
+    }
+    .version-error {
+      color: var(--danger, #d86);
+      font-weight: 600;
+    }
   </style>
 
 </head>
@@ -71,6 +112,15 @@
     </div>
 
     <div class="badge-engine">Unreal Engine 5.5.4</div>
+
+    <div class="version-box" aria-live="polite">
+      <div class="version-label">
+        <span class="version-dot" aria-hidden="true"></span>
+        Ultima build
+      </div>
+      <div class="version-value" id="buildVersionValue">Caricamento...</div>
+      <div class="version-source">Letta da Config/DefaultEngine.ini</div>
+    </div>
 
     <div class="sidebar-note">
       Usa questa pagina come riferimento durante il testing.<br>
@@ -590,6 +640,7 @@ r.MotionBlur.Amount 0.0</code></pre>
       const colorSchemeMeta = document.querySelector('meta[name="color-scheme"]');
       const tooltipToggle = document.getElementById('tooltipToggle');
       const tooltipKey = 'francogame-tooltips';
+      const versionValue = document.getElementById('buildVersionValue');
 
       const safeGet = () => {
         try { return localStorage.getItem(storageKey) || 'system'; } catch (_) { return 'system'; }
@@ -651,6 +702,38 @@ r.MotionBlur.Amount 0.0</code></pre>
           applyTheme('system');
         }
       });
+
+      async function loadBuildVersion() {
+        if (!versionValue) return;
+        const targets = [
+          '../../Config/DefaultEngine.ini',
+          '../Config/DefaultEngine.ini',
+          'Config/DefaultEngine.ini',
+          'https://raw.githubusercontent.com/Papin-Network/FrancoGame/main/Config/DefaultEngine.ini'
+        ];
+
+        for (const url of targets) {
+          try {
+            const response = await fetch(url, { cache: 'no-cache' });
+            if (!response.ok) continue;
+
+            const content = await response.text();
+            const match = content.match(/^\s*Version\s*=\s*([^\r\n#;]+)/mi);
+
+            if (match && match[1]) {
+              versionValue.textContent = match[1].trim();
+              return;
+            }
+          } catch (_) {
+            // Ignore and try next target
+          }
+        }
+
+        versionValue.textContent = 'N/D';
+        versionValue.classList.add('version-error');
+      }
+
+      loadBuildVersion();
     })();
   </script>
 
