@@ -706,9 +706,10 @@ r.MotionBlur.Amount 0.0</code></pre>
       async function loadBuildVersion() {
         if (!versionValue) return;
         const targets = [
-          '../../Config/DefaultEngine.ini',
           '../Config/DefaultEngine.ini',
           'Config/DefaultEngine.ini',
+          './Config/DefaultEngine.ini',
+          'https://raw.githubusercontent.com/Papin-Network/FrancoGame-Docs/main/Config/DefaultEngine.ini',
           'https://raw.githubusercontent.com/Papin-Network/FrancoGame/main/Config/DefaultEngine.ini'
         ];
 
