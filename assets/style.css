@@ -142,6 +142,14 @@
       margin-bottom: 1.25rem;
     }
 
+    .logo-link {
+      display: flex;
+      align-items: center;
+      gap: 0.55rem;
+      text-decoration: none;
+      color: inherit;
+    }
+
     .badge-engine {
       font-size: 0.7rem;
       text-transform: uppercase;
