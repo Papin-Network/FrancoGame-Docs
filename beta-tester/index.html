@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="it">
 <head>
   <meta charset="UTF-8">
@@ -14,13 +14,13 @@
 
       try { saved = localStorage.getItem(storageKey); } catch (_) {}
 
-      const mode = saved === 'light' || saved === 'dark' ? saved : 'system';
-      const resolved = mode === 'dark' ? 'dark' : mode === 'light' ? 'light' : (prefersDark ? 'dark' : 'light');
-      document.documentElement.classList.add(resolved === 'dark' ? 'theme-dark' : 'theme-light');
+      const mode = saved === 'light' || saved === 'dark' I saved : 'system';
+      const resolved = mode === 'dark' I 'dark' : mode === 'light' I 'light' : (prefersDark I 'dark' : 'light');
+      document.documentElement.classList.add(resolved === 'dark' I 'theme-dark' : 'theme-light');
     })();
   </script>
 
-  <link rel="stylesheet" href="../assets/style.css?v=20251209">
+  <link rel="stylesheet" href="../assets/style.cssIv=20251209">
   <style>
     .tooltip-term { position: relative; cursor: help; border-bottom: 1px dashed var(--border-subtle); }
     .tooltip-enabled .tooltip-term::after {
@@ -57,7 +57,9 @@
 </head>
 <body>
 
-  <aside class="sidebar">
+  <!-- wp:group {"tagName":"aside","className":"sidebar"} -->
+  <aside class="wp-block-group sidebar">
+    <!-- wp:html -->
     <div class="sidebar-header">
       <a class="logo-link" href="https://papin-network.github.io/FrancoGame-Docs/">
         <div class="logo-circle">FG</div>
@@ -115,12 +117,18 @@
         <span>Console: tasto sotto <strong>Esc</strong></span>
       </div>
     </div>
+    <!-- /wp:html -->
   </aside>
+  <!-- /wp:group -->
 
-  <main class="content">
-    <div class="content-inner">
+  <!-- wp:group {"tagName":"main","className":"content"} -->
+  <main class="wp-block-group content">
+    <!-- wp:group {"className":"content-inner"} -->
+    <div class="wp-block-group content-inner">
 
-      <header class="page-header">
+      <!-- wp:group {"tagName":"header","className":"page-header"} -->
+      <header class="wp-block-group page-header">
+        <!-- wp:html -->
         <h1 class="page-title">Comandi console per beta tester</h1>
         <p class="page-subtitle">
           Riferimento rapido per modificare grafica, performance e debug nelle build di FrancoGame.
@@ -131,10 +139,14 @@
           <div class="tag-pill"><strong>Uso</strong> - Solo in ambienti non di produzione</div>
           <div class="tag-pill"><strong>Build</strong> - <span id="buildVersionValue">Caricamento...</span></div>
         </div>
+        <!-- /wp:html -->
       </header>
+      <!-- /wp:group -->
 
       <!-- 1. Introduzione -->
-      <section id="intro">
+      <!-- wp:group {"tagName":"section","anchor":"intro"} -->
+      <section id="intro" class="wp-block-group">
+        <!-- wp:html -->
         <h2>
           1. Introduzione
           <span class="section-label">Come usare questa pagina</span>
@@ -149,14 +161,14 @@
         </ul>
         <h3>Scaricare e avviare la build</h3>
         <ol style="margin:0.35rem 0 0.6rem 1.1rem; padding:0; color:var(--text-muted); font-size:0.9rem; line-height:1.5;">
-          <li>Apri la pagina <strong>Releases</strong> su GitHub e scegli l’ultima build (es. <em>DevelopmentBuild</em>).</li>
-          <li>Scarica tutte le parti dello zip (es. <code>Build.zip.001</code>, <code>Build.zip.002</code>, …) e mettile nella stessa cartella.</li>
-          <li>Estrai usando 7-Zip partendo dal file <code>.zip.001</code> (click destro → 7-Zip → <em>Estrai qui</em>); le altre parti verranno lette automaticamente.</li>
+          <li>Apri la pagina <strong>Releases</strong> su GitHub e scegli l'ultima build (es. <em>DevelopmentBuild</em>).</li>
+          <li>Scarica tutte le parti dello zip (es. <code>Build.zip.001</code>, <code>Build.zip.002</code>, ...) e mettile nella stessa cartella.</li>
+          <li>Estrai usando 7-Zip partendo dal file <code>.zip.001</code> (click destro -> 7-Zip -> <em>Estrai qui</em>); le altre parti verranno lette automaticamente.</li>
           <li>Avvia il gioco da <code>FrancoGame.exe</code> in <code>FrancoGame/Binaries/Win64</code> (o percorso equivalente).</li>
         </ol>
         <div class="callout">
           <div class="callout-label">Tip</div>
-          <div>Se l’estrazione fallisce, verifica che tutte le parti dello zip siano nella stessa cartella e che nessun file sia corrotto.</div>
+          <div>Se l'estrazione fallisce, verifica che tutte le parti dello zip siano nella stessa cartella e che nessun file sia corrotto.</div>
         </div>
         <div style="margin:0.6rem 0 0.8rem;">
           <img src="../assets/img/Screenshot_30-11-2025_194225_github.com.jpeg" alt="Esempio di pagina Releases su GitHub" style="width:100%; border-radius:0.9rem; border:1px solid var(--border-subtle); box-shadow: var(--shadow-elevated); display:block;">
@@ -167,10 +179,14 @@
             Tutti i comandi elencati in questa pagina vanno digitati nella console e confermati con <strong>Invio</strong>.
           </div>
         </div>
+        <!-- /wp:html -->
       </section>
+      <!-- /wp:group -->
 
       <!-- 2. Comandi base -->
-      <section id="base" class="alt">
+      <!-- wp:group {"tagName":"section","anchor":"base","className":"alt"} -->
+      <section id="base" class="wp-block-group alt">
+        <!-- wp:html -->
         <h2>2. Comandi base <span class="section-label">Controllo del gioco</span></h2>
 
         <h3>2.1 Controllo generale del gioco</h3>
@@ -210,10 +226,14 @@
             </div>
           </div>
         </div>
+        <!-- /wp:html -->
       </section>
+      <!-- /wp:group -->
 
       <!-- 3. Statistiche di performance -->
-      <section id="perf">
+      <!-- wp:group {"tagName":"section","anchor":"perf"} -->
+      <section id="perf" class="wp-block-group">
+        <!-- wp:html -->
         <h2>3. Statistiche di performance <span class="section-label">FPS, tempi &amp; memoria</span></h2>
 
         <p>
@@ -262,17 +282,21 @@
             Per segnalare un bug di performance abilita almeno <code>stat fps</code> e <code>stat unit</code> e allega uno screenshot.
           </div>
         </div>
+        <!-- /wp:html -->
       </section>
+      <!-- /wp:group -->
 
       <!-- 4. Grafica & performance -->
-      <section id="gfx" class="alt">
+      <!-- wp:group {"tagName":"section","anchor":"gfx","className":"alt"} -->
+      <section id="gfx" class="wp-block-group alt">
+        <!-- wp:html -->
         <h2>4. Impostazioni di grafica e performance <span class="section-label">Preset &amp; regolazioni</span></h2>
 
         <div class="callout">
           <div class="callout-label">Regola generale</div>
           <div>
             Se il gioco scatta o va lento, prova prima i preset <strong>Bassa</strong> o <strong>Media</strong>.<br>
-            Se il gioco è fluido e vuoi più qualità, prova <strong>Alta</strong>.
+            Se il gioco e fluido e vuoi piu qualita, prova <strong>Alta</strong>.
           </div>
         </div>
 
@@ -289,7 +313,7 @@
             <div class="cmd-desc">
               Limita il gioco a 60 FPS (puoi usare anche 30, 120, 144, ecc.).
               <div class="cmd-tag-row">
-                <span class="cmd-tag">Stabilità</span>
+                <span class="cmd-tag">Stabilita</span>
                 <span class="cmd-tag">Riduzione carico</span>
               </div>
             </div>
@@ -299,8 +323,8 @@
         <p>Consigliato quando:</p>
         <ul class="compact">
           <li>il PC scalda troppo</li>
-          <li>la <span class="tooltip-term" data-tooltip="La scheda video: gestisce il rendering del gioco.">GPU</span> è costantemente al 100%</li>
-          <li>preferisci un frame rate più stabile</li>
+          <li>la <span class="tooltip-term" data-tooltip="La scheda video: gestisce il rendering del gioco.">GPU</span> e costantemente al 100%</li>
+          <li>preferisci un frame rate piu stabile</li>
         </ul>
 
         <h3>4.2 VSync (sincronizzazione verticale)</h3>
@@ -309,13 +333,13 @@
           <div class="cmd-row">
             <div class="cmd-name"><span class="dot"></span><span class="tooltip-term" data-tooltip="Sincronizza i frame con il refresh del monitor: meno tearing, possibili FPS piu bassi.">r.VSync 1</span></div>
             <div class="cmd-desc">
-              VSync attivo: riduce il tearing verticale, può causare piccoli cali di FPS.
+              VSync attivo: riduce il tearing verticale, puo causare piccoli cali di FPS.
             </div>
           </div>
           <div class="cmd-row">
             <div class="cmd-name"><span class="dot"></span><span class="tooltip-term" data-tooltip="Disattiva la sincronizzazione: massimi FPS ma il tearing puo essere visibile.">r.VSync 0</span></div>
             <div class="cmd-desc">
-              VSync disattivo: più FPS possibili, ma può comparire tearing.
+              VSync disattivo: piu FPS possibili, ma puo comparire tearing.
             </div>
           </div>
         </div>
@@ -325,41 +349,41 @@
         <div class="cmd-group">
           <div class="cmd-row">
             <div class="cmd-name"><span class="dot"></span><span class="tooltip-term" data-tooltip="Renderizza alla risoluzione piena: massima nitidezza, piu carico per la GPU.">r.ScreenPercentage 100</span></div>
-            <div class="cmd-desc">Qualità normale (100% della risoluzione).</div>
+            <div class="cmd-desc">Qualita normale (100% della risoluzione).</div>
           </div>
           <div class="cmd-row">
             <div class="cmd-name"><span class="dot"></span><span class="tooltip-term" data-tooltip="Renderizza all'80% della risoluzione: alleggerisce la GPU con perdita visiva limitata.">r.ScreenPercentage 80</span></div>
-            <div class="cmd-desc">Leggero boost di performance con perdita minima di qualità.</div>
+            <div class="cmd-desc">Leggero boost di performance con perdita minima di qualita.</div>
           </div>
           <div class="cmd-row">
             <div class="cmd-name"><span class="dot"></span><span class="tooltip-term" data-tooltip="Renderizza al 70%: immagine piu morbida ma performance sensibilmente migliori.">r.ScreenPercentage 70</span></div>
-            <div class="cmd-desc">Qualità ridotta, utile su PC più deboli.</div>
+            <div class="cmd-desc">Qualita ridotta, utile su PC piu deboli.</div>
           </div>
         </div>
 
         <p><strong>Suggerimento:</strong></p>
         <pre><code>r.ScreenPercentage 80</code></pre>
         <p>
-          Se il gioco è ancora troppo pesante, scendi a <code>70</code>.
+          Se il gioco e ancora troppo pesante, scendi a <code>70</code>.
         </p>
 
         <h3>4.4 Preset grafici consigliati</h3>
         <p>
-          I seguenti comandi regolano i "gruppi di qualità" dell'engine. Valori validi:
-          <code>0</code> (molto basso) → <code>4</code> (molto alto / cinematico).
+          I seguenti comandi regolano i "gruppi di qualita" dell'engine. Valori validi:
+          <code>0</code> (molto basso) -> <code>4</code> (molto alto / cinematico).
         </p>
         <ul class="compact">
           <li><code>sg.ViewDistance X</code> - distanza di visualizzazione oggetti</li>
-          <li><code>sg.ShadowQuality X</code> - qualità ombre</li>
+          <li><code>sg.ShadowQuality X</code> - qualita ombre</li>
           <li><code>sg.PostProcessQuality X</code> - effetti post-process (bloom, DOF, ecc.)</li>
-          <li><code>sg.TextureQuality X</code> - qualità texture</li>
+          <li><code>sg.TextureQuality X</code> - qualita texture</li>
           <li><code>sg.EffectsQuality X</code> - particelle / effetti</li>
           <li><code>sg.FoliageQuality X</code> - vegetazione</li>
           <li><code>sg.ReflectionQuality X</code> - riflessi</li>
           <li>(se presente) <code>sg.GlobalIlluminationQuality X</code> - illuminazione globale</li>
         </ul>
 
-        <h3>4.4.1 Preset "Bassa qualità" (PC deboli)</h3>
+        <h3>4.4.1 Preset "Bassa qualita" (PC deboli)</h3>
         <pre><code>sg.ViewDistance 1
 sg.ShadowQuality 1
 sg.PostProcessQuality 1
@@ -369,7 +393,7 @@ sg.FoliageQuality 0
 sg.ReflectionQuality 1
 r.ScreenPercentage 80</code></pre>
 
-        <h3>4.4.2 Preset "Media qualità" (equilibrato)</h3>
+        <h3>4.4.2 Preset "Media qualita" (equilibrato)</h3>
         <pre><code>sg.ViewDistance 2
 sg.ShadowQuality 2
 sg.PostProcessQuality 2
@@ -379,7 +403,7 @@ sg.FoliageQuality 2
 sg.ReflectionQuality 2
 r.ScreenPercentage 100</code></pre>
 
-        <h3>4.4.3 Preset "Alta qualità" (PC buoni)</h3>
+        <h3>4.4.3 Preset "Alta qualita" (PC buoni)</h3>
         <pre><code>sg.ViewDistance 3
 sg.ShadowQuality 3
 sg.PostProcessQuality 3
@@ -392,22 +416,26 @@ r.ScreenPercentage 100</code></pre>
         <div class="callout danger">
           <div class="callout-label">Attenzione</div>
           <div>
-            Se con il preset "Alta qualità" il gioco subisce cali di performance, torna a <strong>Media qualità</strong>.
+            Se con il preset "Alta qualita" il gioco subisce cali di performance, torna a <strong>Media qualita</strong>.
           </div>
         </div>
+        <!-- /wp:html -->
       </section>
+      <!-- /wp:group -->
 
       <!-- 5. Comfort visivo -->
-      <section id="comfort">
+      <!-- wp:group {"tagName":"section","anchor":"comfort"} -->
+      <section id="comfort" class="wp-block-group">
+        <!-- wp:html -->
         <h2>5. Comfort visivo <span class="section-label">FOV &amp; motion blur</span></h2>
 
         <h3>5.1 Campo visivo (FOV)</h3>
 
         <p>Valori comuni:</p>
         <ul class="compact">
-          <li><code>fov 80</code> - per schermi più piccoli o giocatori sensibili al motion sickness</li>
+          <li><code>fov 80</code> - per schermi piu piccoli o giocatori sensibili al motion sickness</li>
           <li><code>fov 90</code> - valore intermedio consigliato</li>
-          <li><code>fov 100</code> - per chi preferisce un campo visivo più ampio</li>
+          <li><code>fov 100</code> - per chi preferisce un campo visivo piu ampio</li>
         </ul>
 
         <p>
@@ -416,7 +444,7 @@ r.ScreenPercentage 100</code></pre>
 
         <h3>5.2 Motion blur</h3>
         <p>
-          L'uso del motion blur dipende da come è stata configurata la build. Se supportato, alcuni comandi tipici sono:
+          L'uso del motion blur dipende da come e stata configurata la build. Se supportato, alcuni comandi tipici sono:
         </p>
 
         <div class="cmd-group">
@@ -442,10 +470,14 @@ r.ScreenPercentage 100</code></pre>
         <pre><code>r.MotionBlurQuality 0
 r.MotionBlur.Amount 0.0</code></pre>
         <p>(solo se la build supporta questi comandi)</p>
+        <!-- /wp:html -->
       </section>
+      <!-- /wp:group -->
 
       <!-- 6. Debug leggero -->
-      <section id="debug" class="alt">
+      <!-- wp:group {"tagName":"section","anchor":"debug","className":"alt"} -->
+      <section id="debug" class="wp-block-group alt">
+        <!-- wp:html -->
         <h2>6. Comandi di debug "leggeri" per QA <span class="section-label">Senza rompere il bilanciamento</span></h2>
 
         <p>
@@ -460,7 +492,7 @@ r.MotionBlur.Amount 0.0</code></pre>
           </div>
           <div class="cmd-row">
             <div class="cmd-name"><span class="dot"></span><span class="tooltip-term" data-tooltip="Evidenzia il navmesh: le aree dove l'IA puo muoversi.">show Navigation</span></div>
-            <div class="cmd-desc">Mostra il navmesh (zone in cui l'IA può muoversi).</div>
+            <div class="cmd-desc">Mostra il navmesh (zone in cui l'IA puo muoversi).</div>
           </div>
         </div>
 
@@ -480,7 +512,7 @@ r.MotionBlur.Amount 0.0</code></pre>
           </div>
         </div>
 
-        <h3>6.3 Debug della rete (se il gioco è multiplayer)</h3>
+        <h3>6.3 Debug della rete (se il gioco e multiplayer)</h3>
         <div class="cmd-group">
           <div class="cmd-row">
             <div class="cmd-name"><span class="dot"></span><span class="tooltip-term" data-tooltip="Pannello rete: mostra ping, perdita pacchetti e banda.">stat net</span></div>
@@ -499,10 +531,14 @@ r.MotionBlur.Amount 0.0</code></pre>
             <div class="cmd-desc">Simula perdita di pacchetti in %, es. <code>net pktloss=5</code>.</div>
           </div>
         </div>
+        <!-- /wp:html -->
       </section>
+      <!-- /wp:group -->
 
       <!-- 7. Comandi per bug -->
-      <section id="bug">
+      <!-- wp:group {"tagName":"section","anchor":"bug"} -->
+      <section id="bug" class="wp-block-group">
+        <!-- wp:html -->
         <h2>7. Comandi per segnare e riprodurre bug <span class="section-label">Posizioni &amp; screenshot</span></h2>
 
         <p>
@@ -518,19 +554,23 @@ r.MotionBlur.Amount 0.0</code></pre>
           </div>
           <div class="cmd-row">
             <div class="cmd-name"><span class="dot"></span><span class="tooltip-term" data-tooltip="Teletrasporta il giocatore su coordinate salvate da BugIt (posizione + rotazione).">BugItGo X Y Z Yaw Pitch Roll</span></div>
-            <div class="cmd-desc">
+          <div class="cmd-desc">
               Teletrasporta il giocatore a una posizione precisa salvata in precedenza.
             </div>
           </div>
         </div>
+        <!-- /wp:html -->
       </section>
+      <!-- /wp:group -->
 
       <!-- 8. Come riportare un bug -->
-      <section id="report" class="alt">
+      <!-- wp:group {"tagName":"section","anchor":"report","className":"alt"} -->
+      <section id="report" class="wp-block-group alt">
+        <!-- wp:html -->
         <h2>8. Come riportare un bug usando questi comandi <span class="section-label">Checklist per le segnalazioni</span></h2>
 
         <p>
-          Quando segnali un problema, cerca di includere più informazioni possibili. Una buona segnalazione dovrebbe contenere:
+          Quando segnali un problema, cerca di includere piu informazioni possibili. Una buona segnalazione dovrebbe contenere:
         </p>
 
         <ol style="margin:0.4rem 0 0.6rem 1.1rem; padding:0; color:var(--text-muted); font-size:0.9rem; line-height:1.5;">
@@ -557,7 +597,7 @@ r.MotionBlur.Amount 0.0</code></pre>
           </li>
           <li>
             <strong>Passi per riprodurre</strong><br>
-            Esempio: "Carico la mappa X → vado verso la porta a sinistra → entro nella stanza → giro la camera verso il centro".
+            Esempio: "Carico la mappa X -> vado verso la porta a sinistra -> entro nella stanza -> giro la camera verso il centro".
           </li>
         </ol>
 
@@ -584,10 +624,14 @@ r.MotionBlur.Amount 0.0</code></pre>
             Comandi extra o specifici del progetto possono essere aggiunti in una sezione dedicata (teletrasporti interni, feature sperimentali, salti rapidi a livelli o cutscene).
           </div>
         </div>
+        <!-- /wp:html -->
       </section>
+      <!-- /wp:group -->
 
     </div>
+    <!-- /wp:group -->
   </main>
+  <!-- /wp:group -->
 
   <script>
     (function() {
@@ -609,14 +653,14 @@ r.MotionBlur.Amount 0.0</code></pre>
 
       function applyTheme(mode) {
         const resolved = mode === 'dark'
-          ? 'dark'
+          I 'dark'
           : mode === 'light'
-            ? 'light'
-            : (prefersDarkMQ.matches ? 'dark' : 'light');
+            I 'light'
+            : (prefersDarkMQ.matches I 'dark' : 'light');
 
         document.documentElement.classList.toggle('theme-dark', resolved === 'dark');
         document.documentElement.classList.toggle('theme-light', resolved === 'light');
-        colorSchemeMeta?.setAttribute('content', resolved === 'dark' ? 'dark light' : 'light dark');
+        colorSchemeMetaI.setAttribute('content', resolved === 'dark' I 'dark light' : 'light dark');
       }
 
       function safeGetTooltip() {
@@ -637,13 +681,13 @@ r.MotionBlur.Amount 0.0</code></pre>
 
         if (type === 'json') {
           const data = await response.json();
-          const candidate = data?.version || data?.Version || data?.VERSION;
-          return typeof candidate === 'string' ? candidate.trim() : candidate?.toString()?.trim();
+          const candidate = dataI.version || dataI.Version || dataI.VERSION;
+          return typeof candidate === 'string' I candidate.trim() : candidateI.toString()I.trim();
         }
 
         const content = await response.text();
         const match = content.match(/^\s*Version\s*=\s*([^\r\n#;]+)/mi);
-        return match && match[1] ? match[1].trim() : null;
+        return match && match[1] I match[1].trim() : null;
       }
 
       const saved = safeGet();
@@ -657,14 +701,14 @@ r.MotionBlur.Amount 0.0</code></pre>
       });
 
       const savedTooltip = safeGetTooltip();
-      const tooltipEnabled = savedTooltip === null ? true : savedTooltip === 'on';
+      const tooltipEnabled = savedTooltip === null I true : savedTooltip === 'on';
       applyTooltip(tooltipEnabled);
 
       if (tooltipToggle) {
         tooltipToggle.checked = tooltipEnabled;
         tooltipToggle.addEventListener('change', function() {
           const enabled = tooltipToggle.checked;
-          safeSetTooltip(enabled ? 'on' : 'off');
+          safeSetTooltip(enabled I 'on' : 'off');
           applyTooltip(enabled);
         });
       }

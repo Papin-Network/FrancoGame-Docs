@@ -14,18 +14,20 @@
 
       try { saved = localStorage.getItem(storageKey); } catch (_) {}
 
-      const mode = saved === 'light' || saved === 'dark' ? saved : 'system';
-      const resolved = mode === 'dark' ? 'dark' : mode === 'light' ? 'light' : (prefersDark ? 'dark' : 'light');
-      document.documentElement.classList.add(resolved === 'dark' ? 'theme-dark' : 'theme-light');
+      const mode = saved === 'light' || saved === 'dark' I saved : 'system';
+      const resolved = mode === 'dark' I 'dark' : mode === 'light' I 'light' : (prefersDark I 'dark' : 'light');
+      document.documentElement.classList.add(resolved === 'dark' I 'theme-dark' : 'theme-light');
     })();
   </script>
 
-  <link rel="stylesheet" href="../assets/style.css?v=20251209">
+  <link rel="stylesheet" href="../assets/style.cssIv=20251209">
 
 </head>
 <body>
 
-  <aside class="sidebar">
+  <!-- wp:group {"tagName":"aside","className":"sidebar"} -->
+  <aside class="wp-block-group sidebar">
+    <!-- wp:html -->
     <div class="sidebar-header">
       <a class="logo-link" href="https://papin-network.github.io/FrancoGame-Docs/">
         <div class="logo-circle">FG</div>
@@ -70,12 +72,18 @@
         <span>Branch di lavoro: main + feature/*</span>
       </div>
     </div>
+    <!-- /wp:html -->
   </aside>
+  <!-- /wp:group -->
 
-  <main class="content">
-    <div class="content-inner">
+  <!-- wp:group {"tagName":"main","className":"content"} -->
+  <main class="wp-block-group content">
+    <!-- wp:group {"className":"content-inner"} -->
+    <div class="wp-block-group content-inner">
 
-      <header class="page-header">
+      <!-- wp:group {"tagName":"header","className":"page-header"} -->
+      <header class="wp-block-group page-header">
+        <!-- wp:html -->
         <h1 class="page-title">Hub sviluppatori FrancoGame</h1>
         <p class="page-subtitle">
           Procedura rapida per chi lavora su gameplay, build e tool di supporto.
@@ -85,10 +93,14 @@
           <div class="tag-pill"><strong>Stato</strong> - In uso interno</div>
           <div class="tag-pill"><strong>Ultimo update</strong> - Dic 2025</div>
         </div>
+        <!-- /wp:html -->
       </header>
+      <!-- /wp:group -->
 
       <!-- 1. Onboarding -->
-      <section id="onboarding">
+      <!-- wp:group {"tagName":"section","anchor":"onboarding"} -->
+      <section id="onboarding" class="wp-block-group">
+        <!-- wp:html -->
         <h2>
           1. Onboarding rapido
           <span class="section-label">Da zero al primo commit</span>
@@ -136,10 +148,14 @@
           <div class="callout-label">Tip</div>
           <div>Prima di aprire il progetto genera i file della soluzione da Epic Launcher oppure con il comando per rigenerare i file Visual Studio.</div>
         </div>
+        <!-- /wp:html -->
       </section>
+      <!-- /wp:group -->
 
       <!-- 2. Tooling -->
-      <section id="tooling" class="alt">
+      <!-- wp:group {"tagName":"section","anchor":"tooling","className":"alt"} -->
+      <section id="tooling" class="wp-block-group alt">
+        <!-- wp:html -->
         <h2>2. Ambiente e tool <span class="section-label">Versioni consigliate</span></h2>
         <p>
           Mantieni allineate queste versioni per ridurre differenze tra build locali e CI.
@@ -195,10 +211,14 @@
           <div class="callout-label">Consiglio</div>
           <div>Conserva una copia locale del DerivedDataCache condiviso del team: riduce i tempi di prima compilazione shader.</div>
         </div>
+        <!-- /wp:html -->
       </section>
+      <!-- /wp:group -->
 
       <!-- 3. Workflow Git -->
-      <section id="workflow">
+      <!-- wp:group {"tagName":"section","anchor":"workflow"} -->
+      <section id="workflow" class="wp-block-group">
+        <!-- wp:html -->
         <h2>3. Workflow Git <span class="section-label">Branching e PR</span></h2>
         <p>
           Manteniamo il main sempre stabile. Apri feature isolate e spingi PR piccole e frequenti.
@@ -239,10 +259,14 @@
           <div class="callout-label">Nota</div>
           <div>Evita di committare asset binari giganteschi se non tracciati da LFS. In caso di dubbio chiedi prima di pushare.</div>
         </div>
+        <!-- /wp:html -->
       </section>
+      <!-- /wp:group -->
 
       <!-- 4. Build -->
-      <section id="build" class="alt">
+      <!-- wp:group {"tagName":"section","anchor":"build","className":"alt"} -->
+      <section id="build" class="wp-block-group alt">
+        <!-- wp:html -->
         <h2>4. Build e test <span class="section-label">Locale</span></h2>
         <p>
           Usa l'editor per i check rapidi, poi esegui una build standalone quando tocchi sistemi core.
@@ -287,10 +311,14 @@
           <div class="callout-label">Ricorda</div>
           <div>Prima di committare asset Niagara/material controlla che le anteprime non usino referenze locali fuori repo.</div>
         </div>
+        <!-- /wp:html -->
       </section>
+      <!-- /wp:group -->
 
       <!-- 5. QA -->
-      <section id="qa">
+      <!-- wp:group {"tagName":"section","anchor":"qa"} -->
+      <section id="qa" class="wp-block-group">
+        <!-- wp:html -->
         <h2>5. Checklist QA <span class="section-label">Smoke test</span></h2>
         <p>
           Checklist minima da eseguire prima di chiedere una review o taggare una release interna.
@@ -307,10 +335,14 @@
           <div class="callout-label">Bloccanti</div>
           <div>Crash riproducibili, materiali mancante (checkerboard), audio mute globale o regressioni input sono stopper: apri subito ticket su GitHub.</div>
         </div>
+        <!-- /wp:html -->
       </section>
+      <!-- /wp:group -->
 
       <!-- 6. Links -->
-      <section id="links" class="alt">
+      <!-- wp:group {"tagName":"section","anchor":"links","className":"alt"} -->
+      <section id="links" class="wp-block-group alt">
+        <!-- wp:html -->
         <h2>6. Risorse utili <span class="section-label">Link rapidi</span></h2>
         <p>Riferimenti frequenti per il team.</p>
 
@@ -340,10 +372,14 @@
             </div>
           </div>
         </div>
+        <!-- /wp:html -->
       </section>
+      <!-- /wp:group -->
 
     </div>
+    <!-- /wp:group -->
   </main>
+  <!-- /wp:group -->
 
   <script>
     (function() {
@@ -362,14 +398,14 @@
 
       function applyTheme(mode) {
         const resolved = mode === 'dark'
-          ? 'dark'
+          I 'dark'
           : mode === 'light'
-            ? 'light'
-            : (prefersDarkMQ.matches ? 'dark' : 'light');
+            I 'light'
+            : (prefersDarkMQ.matches I 'dark' : 'light');
 
         document.documentElement.classList.toggle('theme-dark', resolved === 'dark');
         document.documentElement.classList.toggle('theme-light', resolved === 'light');
-        colorSchemeMeta?.setAttribute('content', resolved === 'dark' ? 'dark light' : 'light dark');
+        colorSchemeMetaI.setAttribute('content', resolved === 'dark' I 'dark light' : 'light dark');
       }
 
       const saved = safeGet();
