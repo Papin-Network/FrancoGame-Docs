@@ -58,7 +58,8 @@
         <li><a href="#workflow"><span class="nav-bullet"></span><span class="section-index">3.</span> Workflow Git</a></li>
         <li><a href="#build"><span class="nav-bullet"></span><span class="section-index">4.</span> Build e test</a></li>
         <li><a href="#qa"><span class="nav-bullet"></span><span class="section-index">5.</span> Checklist QA</a></li>
-        <li><a href="#links"><span class="nav-bullet"></span><span class="section-index">6.</span> Risorse utili</a></li>
+        <li><a href="#commits"><span class="nav-bullet"></span><span class="section-index">6.</span> Feed commit</a></li>
+        <li><a href="#links"><span class="nav-bullet"></span><span class="section-index">7.</span> Risorse utili</a></li>
       </ul>
     </div>
 
@@ -309,9 +310,40 @@
         </div>
       </section>
 
-      <!-- 6. Links -->
-      <section id="links" class="alt">
-        <h2>6. Risorse utili <span class="section-label">Link rapidi</span></h2>
+      <!-- 6. Feed commit -->
+      <section id="commits" class="alt">
+        <h2>
+          6. Feed commit recenti
+          <span class="section-label">Branch main</span>
+        </h2>
+        <p>
+          Ultimi commit pubblici su <code>main</code>. Utile per vedere cosa è appena stato unito senza aprire GitHub.
+        </p>
+
+        <div id="commitFeed" class="feed-list" aria-live="polite">
+          <div class="feed-placeholder">
+            <div class="feed-line short"></div>
+            <div class="feed-line"></div>
+          </div>
+          <div class="feed-placeholder">
+            <div class="feed-line short"></div>
+            <div class="feed-line"></div>
+          </div>
+        </div>
+
+        <div class="feed-status" id="commitFeedStatus">
+          <span class="feed-dot"></span>
+          Caricamento feed GitHub...
+        </div>
+
+        <p class="feed-note">
+          Feed RSS diretto: <a href="https://github.com/Papin-Network/FrancoGame/commits/main.atom" target="_blank" rel="noopener noreferrer">commits/main.atom</a>
+        </p>
+      </section>
+
+      <!-- 7. Links -->
+      <section id="links">
+        <h2>7. Risorse utili <span class="section-label">Link rapidi</span></h2>
         <p>Riferimenti frequenti per il team.</p>
 
         <div class="cmd-group">
@@ -344,6 +376,157 @@
 
     </div>
   </main>
+
+  <script>
+    (function() {
+      const feedRoot = document.getElementById('commitFeed');
+      const statusEl = document.getElementById('commitFeedStatus');
+      if (!feedRoot || !statusEl) return;
+
+      const FEED_URL = 'https://github.com/Papin-Network/FrancoGame/commits/main.atom';
+      const API_URL = 'https://api.github.com/repos/Papin-Network/FrancoGame/commits?sha=main&per_page=6';
+
+      const shortSha = (link) => {
+        const match = /\\/commit\\/([a-f0-9]{7,40})/i.exec(link || '');
+        return match ? match[1].slice(0, 7) : '';
+      };
+
+      const formatDate = (isoString) => {
+        const date = new Date(isoString);
+        if (Number.isNaN(date.getTime())) return '';
+        try {
+          return new Intl.DateTimeFormat('it-IT', { dateStyle: 'medium', timeStyle: 'short' }).format(date);
+        } catch (_) {
+          return date.toLocaleString();
+        }
+      };
+
+      const formatRelative = (isoString) => {
+        const date = new Date(isoString);
+        if (Number.isNaN(date.getTime())) return '';
+        const diffMs = Date.now() - date.getTime();
+        const minutes = Math.max(0, Math.round(diffMs / 60000));
+        if (minutes < 60) return `${minutes}m fa`;
+        const hours = Math.round(minutes / 60);
+        if (hours < 48) return `${hours}h fa`;
+        const days = Math.round(hours / 24);
+        return `${days}g fa`;
+      };
+
+      const renderFeed = (items, sourceText) => {
+        feedRoot.innerHTML = '';
+
+        items.slice(0, 5).forEach((item) => {
+          const card = document.createElement('article');
+          card.className = 'feed-item';
+
+          const header = document.createElement('div');
+          header.className = 'feed-header';
+
+          const titleLink = document.createElement('a');
+          titleLink.className = 'feed-commit';
+          titleLink.href = item.link;
+          titleLink.target = '_blank';
+          titleLink.rel = 'noopener noreferrer';
+          titleLink.textContent = item.title || 'Commit';
+
+          const date = document.createElement('span');
+          date.className = 'feed-date';
+          date.textContent = formatDate(item.date);
+
+          header.appendChild(titleLink);
+          header.appendChild(date);
+
+          const meta = document.createElement('div');
+          meta.className = 'feed-meta';
+
+          const author = document.createElement('span');
+          author.textContent = item.author || 'Autore sconosciuto';
+          meta.appendChild(author);
+
+          const relative = formatRelative(item.date);
+          if (relative) {
+            const relEl = document.createElement('span');
+            relEl.textContent = `· ${relative}`;
+            meta.appendChild(relEl);
+          }
+
+          const sha = item.sha || shortSha(item.link);
+          if (sha) {
+            const chip = document.createElement('span');
+            chip.className = 'feed-chip';
+            chip.textContent = sha;
+            meta.appendChild(chip);
+          }
+
+          card.appendChild(header);
+          card.appendChild(meta);
+          feedRoot.appendChild(card);
+        });
+
+        statusEl.textContent = sourceText;
+      };
+
+      const loadAtom = async () => {
+        const res = await fetch(FEED_URL, { headers: { Accept: 'application/atom+xml' } });
+        if (!res.ok) throw new Error('atom response not ok');
+        const xml = await res.text();
+        const doc = new DOMParser().parseFromString(xml, 'text/xml');
+        const entries = Array.from(doc.querySelectorAll('entry'));
+
+        return entries.map((entry) => {
+          const link = entry.querySelector('link')?.getAttribute('href') || '#';
+          return {
+            title: entry.querySelector('title')?.textContent?.trim(),
+            link,
+            date: entry.querySelector('updated')?.textContent || entry.querySelector('published')?.textContent,
+            author: entry.querySelector('author > name')?.textContent?.trim()
+          };
+        }).filter((item) => item.title && item.link);
+      };
+
+      const loadApi = async () => {
+        const res = await fetch(API_URL, { headers: { Accept: 'application/vnd.github+json' } });
+        if (!res.ok) throw new Error('api response not ok');
+        const data = await res.json();
+
+        return (Array.isArray(data) ? data : []).map((entry) => ({
+          title: entry?.commit?.message?.split('\\n')[0],
+          link: entry?.html_url || '#',
+          date: entry?.commit?.author?.date,
+          author: entry?.commit?.author?.name,
+          sha: entry?.sha ? entry.sha.slice(0, 7) : ''
+        })).filter((item) => item.title && item.link);
+      };
+
+      const loadFeed = async () => {
+        try {
+          const atomItems = await loadAtom();
+          if (atomItems.length) {
+            renderFeed(atomItems, 'Fonte: RSS commit GitHub (main)');
+            return;
+          }
+        } catch (_) {
+          // Atom fallthrough to API
+        }
+
+        try {
+          const apiItems = await loadApi();
+          if (apiItems.length) {
+            renderFeed(apiItems, 'Fonte: GitHub API (fallback)');
+            return;
+          }
+        } catch (err) {
+          console.warn('Commit feed fallback failed', err);
+        }
+
+        feedRoot.innerHTML = '<div class="feed-empty">Impossibile caricare il feed commit. Apri la repository su GitHub.</div>';
+        statusEl.textContent = 'Nessun feed disponibile.';
+      };
+
+      loadFeed();
+    })();
+  </script>
 
   <script>
     (function() {
