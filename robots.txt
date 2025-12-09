@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+Disallow: /Config/
+
+Sitemap: https://papin-network.github.io/FrancoGame-Docs/sitemap.xml
