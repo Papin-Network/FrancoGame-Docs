@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <title>FrancoGame - Hub sviluppatori</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark light">
+
+  <script>
+    (function() {
+      const storageKey = 'francogame-theme';
+      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      let saved = null;
+
+      try { saved = localStorage.getItem(storageKey); } catch (_) {}
+
+      const mode = saved === 'light' || saved === 'dark' ? saved : 'system';
+      const resolved = mode === 'dark' ? 'dark' : mode === 'light' ? 'light' : (prefersDark ? 'dark' : 'light');
+      document.documentElement.classList.add(resolved === 'dark' ? 'theme-dark' : 'theme-light');
+    })();
+  </script>
+
+  <link rel="stylesheet" href="../assets/style.css">
+
+</head>
+<body>
+
+  <aside class="sidebar">
+    <div class="sidebar-header">
+      <div class="logo-circle">FG</div>
+      <div class="sidebar-title-block">
+        <div class="sidebar-title">FrancoGame</div>
+        <div class="sidebar-subtitle">Hub sviluppatori</div>
+      </div>
+      <div style="margin-left:auto; display:flex; align-items:center; gap:0.5rem;">
+        <label for="themeSelect" style="font-size:0.75rem; color:var(--text-soft);">Tema</label>
+        <select id="themeSelect" aria-label="Seleziona tema" style="background:var(--bg-elevated); color:var(--text-main); border:1px solid var(--border-subtle); padding:0.22rem 0.4rem; border-radius:6px;">
+          <option value="system">Sistema</option>
+          <option value="light">Chiaro</option>
+          <option value="dark">Scuro</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="badge-engine">Unreal Engine 5.5.4</div>
+
+    <div class="sidebar-note">
+      Appunti veloci per lavorare sul progetto: setup, workflow Git, build e test locali.
+    </div>
+
+    <div>
+      <p class="nav-section-title">Sezioni</p>
+      <ul class="nav-list">
+        <li><a href="#onboarding"><span class="nav-bullet"></span><span class="section-index">1.</span> Onboarding rapido</a></li>
+        <li><a href="#tooling"><span class="nav-bullet"></span><span class="section-index">2.</span> Ambiente e tool</a></li>
+        <li><a href="#workflow"><span class="nav-bullet"></span><span class="section-index">3.</span> Workflow Git</a></li>
+        <li><a href="#build"><span class="nav-bullet"></span><span class="section-index">4.</span> Build e test</a></li>
+        <li><a href="#qa"><span class="nav-bullet"></span><span class="section-index">5.</span> Checklist QA</a></li>
+        <li><a href="#links"><span class="nav-bullet"></span><span class="section-index">6.</span> Risorse utili</a></li>
+      </ul>
+    </div>
+
+    <div class="nav-footer">
+      Note pensate per team interno.
+      <small>Aggiorna questa pagina quando cambi flussi o versioni.</small>
+      <div class="nav-footer-code">
+        <span class="nav-footer-dot"></span>
+        <span>Branch di lavoro: main + feature/*</span>
+      </div>
+    </div>
+  </aside>
+
+  <main class="content">
+    <div class="content-inner">
+
+      <header class="page-header">
+        <h1 class="page-title">Hub sviluppatori FrancoGame</h1>
+        <p class="page-subtitle">
+          Procedura rapida per chi lavora su gameplay, build e tool di supporto.
+        </p>
+        <div class="tag-row">
+          <div class="tag-pill"><strong>Target</strong> - Dev e Tech Art</div>
+          <div class="tag-pill"><strong>Stato</strong> - In uso interno</div>
+          <div class="tag-pill"><strong>Ultimo update</strong> - Dic 2025</div>
+        </div>
+      </header>
+
+      <!-- 1. Onboarding -->
+      <section id="onboarding">
+        <h2>
+          1. Onboarding rapido
+          <span class="section-label">Da zero al primo commit</span>
+        </h2>
+        <p>
+          Segui questi passi per preparare la macchina e contribuire senza blocchi.
+        </p>
+
+        <div class="cmd-group">
+          <div class="cmd-row">
+            <div class="cmd-name"><span class="dot"></span><span>git clone git@github.com:Papin-Network/FrancoGame.git</span></div>
+            <div class="cmd-desc">
+              Clona la repo principale (usa SSH). Se preferisci HTTPS, usa il token personale.
+              <div class="cmd-tag-row">
+                <span class="cmd-tag">Repo</span>
+                <span class="cmd-tag">SSH</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="cmd-row">
+            <div class="cmd-name"><span class="dot"></span><span>git clone git@github.com:Papin-Network/FrancoGame-Docs.git</span></div>
+            <div class="cmd-desc">
+              Clona la repo della documentazione per servire le pagine statiche e aggiornare guide interne.
+              <div class="cmd-tag-row">
+                <span class="cmd-tag">Docs</span>
+                <span class="cmd-tag">Statico</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="cmd-row">
+            <div class="cmd-name"><span class="dot"></span><span>git config --global core.autocrlf true</span></div>
+            <div class="cmd-desc">
+              Evita problemi di fine linea su Windows. Se lavori su piu OS usa <code>input</code> al posto di <code>true</code>.
+              <div class="cmd-tag-row">
+                <span class="cmd-tag">Qualita</span>
+                <span class="cmd-tag">Cross OS</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="callout">
+          <div class="callout-label">Tip</div>
+          <div>Prima di aprire il progetto genera i file della soluzione da Epic Launcher oppure con il comando per rigenerare i file Visual Studio.</div>
+        </div>
+      </section>
+
+      <!-- 2. Tooling -->
+      <section id="tooling" class="alt">
+        <h2>2. Ambiente e tool <span class="section-label">Versioni consigliate</span></h2>
+        <p>
+          Mantieni allineate queste versioni per ridurre differenze tra build locali e CI.
+        </p>
+
+        <div class="cmd-group">
+          <div class="cmd-row">
+            <div class="cmd-name"><span class="dot"></span><span>Unreal Engine 5.5.4</span></div>
+            <div class="cmd-desc">
+              Versione di riferimento. Se Epic rilascia hotfix, aggiorna solo dopo aver verificato asset e plug-in.
+              <div class="cmd-tag-row">
+                <span class="cmd-tag">Engine</span>
+                <span class="cmd-tag">Allineamento</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="cmd-row">
+            <div class="cmd-name"><span class="dot"></span><span>Visual Studio 2022 + Desktop C++</span></div>
+            <div class="cmd-desc">
+              Installa workload C++ con SDK Windows 10/11. Per chi usa Rider attiva comunque i componenti MSVC.
+              <div class="cmd-tag-row">
+                <span class="cmd-tag">IDE</span>
+                <span class="cmd-tag">MSVC</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="cmd-row">
+            <div class="cmd-name"><span class="dot"></span><span>Git LFS</span></div>
+            <div class="cmd-desc">
+              Necessario per asset pesanti. Dopo l'installazione esegui <code>git lfs install</code> e verifica con <code>git lfs ls-files</code>.
+              <div class="cmd-tag-row">
+                <span class="cmd-tag">Asset</span>
+                <span class="cmd-tag">Storage</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="cmd-row">
+            <div class="cmd-name"><span class="dot"></span><span>NVIDIA/AMD driver aggiornati</span></div>
+            <div class="cmd-desc">
+              Per debug GPU usa i driver studio o l'ultimo game ready stabile. Segnala la versione usata nel ticket se trovi glitch grafici.
+              <div class="cmd-tag-row">
+                <span class="cmd-tag">GPU</span>
+                <span class="cmd-tag">Stabilita</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="callout success">
+          <div class="callout-label">Consiglio</div>
+          <div>Conserva una copia locale del DerivedDataCache condiviso del team: riduce i tempi di prima compilazione shader.</div>
+        </div>
+      </section>
+
+      <!-- 3. Workflow Git -->
+      <section id="workflow">
+        <h2>3. Workflow Git <span class="section-label">Branching e PR</span></h2>
+        <p>
+          Manteniamo il main sempre stabile. Apri feature isolate e spingi PR piccole e frequenti.
+        </p>
+
+        <ul class="compact">
+          <li>Branch naming: <code>feature/titolo-breve</code> per sviluppo, <code>fix/bug-###</code> per bugfix.</li>
+          <li>Commits compatti e descrittivi (es. "Fix streaming audio fallback").</li>
+          <li>Prima di aprire la PR esegui build editor + smoke test rapido sulla tua mappa di riferimento.</li>
+          <li>Richiedi almeno un review dev. Se tocchi asset condivisi, tagga tech art.</li>
+        </ul>
+
+        <div class="cmd-group">
+          <div class="cmd-row">
+            <div class="cmd-name"><span class="dot"></span><span>git pull --rebase origin main</span></div>
+            <div class="cmd-desc">
+              Rebase prima di push per evitare merge rumorosi. Se hai molti conflitti valuta una merge pulita su main.
+              <div class="cmd-tag-row">
+                <span class="cmd-tag">Allineamento</span>
+                <span class="cmd-tag">Pulizia</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="cmd-row">
+            <div class="cmd-name"><span class="dot"></span><span>git push --force-with-lease</span></div>
+            <div class="cmd-desc">
+              Usa solo dopo un rebase locale sulla tua feature. Non forzare su main.
+              <div class="cmd-tag-row">
+                <span class="cmd-tag">Sicurezza</span>
+                <span class="cmd-tag">Feature</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="callout">
+          <div class="callout-label">Nota</div>
+          <div>Evita di committare asset binari giganteschi se non tracciati da LFS. In caso di dubbio chiedi prima di pushare.</div>
+        </div>
+      </section>
+
+      <!-- 4. Build -->
+      <section id="build" class="alt">
+        <h2>4. Build e test <span class="section-label">Locale</span></h2>
+        <p>
+          Usa l'editor per i check rapidi, poi esegui una build standalone quando tocchi sistemi core.
+        </p>
+
+        <h3>4.1 Passi consigliati</h3>
+        <ol style="margin:0.35rem 0 0.6rem 1.1rem; padding:0; color:var(--text-muted); font-size:0.9rem; line-height:1.5;">
+          <li>Lancia "Verify" dall'Epic Launcher se l'engine ha crash sospetti.</li>
+          <li>Rigenera i project files quando cambi versione engine o plug-in.</li>
+          <li>Apri il livello di riferimento e controlla log per warning rossi ripetuti.</li>
+          <li>Compila in Development Editor, poi avvia PIE (senza VR) almeno 5 minuti.</li>
+          <li>Se tocchi streaming o asset pesanti, prova un pacchetto <em>Shipping</em> su Win64.</li>
+        </ol>
+
+        <h3>4.2 Comandi utili</h3>
+        <div class="cmd-group">
+          <div class="cmd-row">
+            <div class="cmd-name"><span class="dot"></span><span>.\Engine\Build\BatchFiles\GenerateProjectFiles.bat</span></div>
+            <div class="cmd-desc">
+              Rigenera la soluzione dopo update engine o nuovi plug-in. Esegui da una shell con i path dell'engine corretti.
+            </div>
+          </div>
+          <div class="cmd-row">
+            <div class="cmd-name"><span class="dot"></span><span>.\Engine\Build\BatchFiles\Build.bat FrancoGameEditor Win64 Development</span></div>
+            <div class="cmd-desc">
+              Compilazione editor lato comando. Aggiungi <code>-WaitMutex</code> se lavori con piu build in parallelo.
+            </div>
+          </div>
+          <div class="cmd-row">
+            <div class="cmd-name"><span class="dot"></span><span>.\Engine\Build\BatchFiles\RunUAT.bat BuildCookRun ...</span></div>
+            <div class="cmd-desc">
+              Packaging rapido: specifica <code>-project=FrancoGame.uproject</code> e i flag <code>-cook -stage -package</code>.
+              <div class="cmd-tag-row">
+                <span class="cmd-tag">Packaging</span>
+                <span class="cmd-tag">Win64</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="callout success">
+          <div class="callout-label">Ricorda</div>
+          <div>Prima di committare asset Niagara/material controlla che le anteprime non usino referenze locali fuori repo.</div>
+        </div>
+      </section>
+
+      <!-- 5. QA -->
+      <section id="qa">
+        <h2>5. Checklist QA <span class="section-label">Smoke test</span></h2>
+        <p>
+          Checklist minima da eseguire prima di chiedere una review o taggare una release interna.
+        </p>
+        <ul class="compact">
+          <li>Nessun warning rosso persistente in log editor per 2 avvii consecutivi.</li>
+          <li>PIE: giro base con input tastiera + controller (se supportato) per 5 minuti.</li>
+          <li>Stat performance: <code>stat fps</code> attivo e frame rate stabile nell'area di test.</li>
+          <li>Asset nuovi: miniature generate e referenze corrette nei blueprint.</li>
+          <li>Packaging veloce: build Development o Shipping avviata almeno una volta se tocchi core systems.</li>
+        </ul>
+
+        <div class="callout danger">
+          <div class="callout-label">Bloccanti</div>
+          <div>Crash riproducibili, materiali mancante (checkerboard), audio mute globale o regressioni input sono stopper: apri subito ticket su GitHub.</div>
+        </div>
+      </section>
+
+      <!-- 6. Links -->
+      <section id="links" class="alt">
+        <h2>6. Risorse utili <span class="section-label">Link rapidi</span></h2>
+        <p>Riferimenti frequenti per il team.</p>
+
+        <div class="cmd-group">
+          <div class="cmd-row">
+            <div class="cmd-name"><span class="dot"></span><span>Repository gioco</span></div>
+            <div class="cmd-desc">
+              <a href="https://github.com/Papin-Network/FrancoGame" style="color:var(--accent); text-decoration:none;">https://github.com/Papin-Network/FrancoGame</a>
+            </div>
+          </div>
+          <div class="cmd-row">
+            <div class="cmd-name"><span class="dot"></span><span>Documentazione</span></div>
+            <div class="cmd-desc">
+              <a href="https://papin-network.github.io/FrancoGame-Docs/" style="color:var(--accent); text-decoration:none;">https://papin-network.github.io/FrancoGame-Docs/</a>
+            </div>
+          </div>
+          <div class="cmd-row">
+            <div class="cmd-name"><span class="dot"></span><span>Issue tracker</span></div>
+            <div class="cmd-desc">
+              Usa GitHub Issues per bug e task. Tag principali: <code>bug</code>, <code>type:task</code>, <code>needs-info</code>.
+            </div>
+          </div>
+          <div class="cmd-row">
+            <div class="cmd-name"><span class="dot"></span><span>Canale build</span></div>
+            <div class="cmd-desc">
+              Condividi changelog sintetico e link alla build quando pacchetti. Se mancano asset in LFS, segnalo nel messaggio.
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <script>
+    (function() {
+      const select = document.getElementById('themeSelect');
+      const storageKey = 'francogame-theme';
+      const prefersDarkMQ = window.matchMedia('(prefers-color-scheme: dark)');
+      const colorSchemeMeta = document.querySelector('meta[name="color-scheme"]');
+
+      const safeGet = () => {
+        try { return localStorage.getItem(storageKey) || 'system'; } catch (_) { return 'system'; }
+      };
+
+      const safeSet = (val) => {
+        try { localStorage.setItem(storageKey, val); } catch (_) {}
+      };
+
+      function applyTheme(mode) {
+        const resolved = mode === 'dark'
+          ? 'dark'
+          : mode === 'light'
+            ? 'light'
+            : (prefersDarkMQ.matches ? 'dark' : 'light');
+
+        document.documentElement.classList.toggle('theme-dark', resolved === 'dark');
+        document.documentElement.classList.toggle('theme-light', resolved === 'light');
+        colorSchemeMeta?.setAttribute('content', resolved === 'dark' ? 'dark light' : 'light dark');
+      }
+
+      const saved = safeGet();
+      select.value = saved;
+      applyTheme(saved);
+
+      select.addEventListener('change', function() {
+        const val = select.value;
+        safeSet(val);
+        applyTheme(val);
+      });
+
+      prefersDarkMQ.addEventListener('change', () => {
+        if (safeGet() === 'system') {
+          applyTheme('system');
+        }
+      });
+    })();
+  </script>
+
+</body>
+</html>
